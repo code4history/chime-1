@@ -6,12 +6,11 @@ name: Chime Lint and Test
 on:
   push:
     branches:
-      - master
-      - 'feature/**'
-      - 'release/**'
+      - '**'
   pull_request:
     branches:
-      - master
+      - develop
+      - 'releases/**'
 
 jobs:
   build:
@@ -37,4 +36,4 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        pytest
+        python -m pytest
