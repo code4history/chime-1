@@ -1,5 +1,6 @@
 import altair as alt
 import streamlit as st
+import i18n
 
 from penn_chime.defaults import RateLos
 from penn_chime.models import Parameters
@@ -20,6 +21,10 @@ from penn_chime.presentation import (
 from penn_chime.utils import build_admissions_df, build_census_df
 from penn_chime.settings import DEFAULTS
 
+i18n.set('filename_format', '{locale}.{format}')
+i18n.set('locale', 'ja')
+i18n.set('fallback', 'en')
+i18n.load_path.append('./locales')
 
 # This is somewhat dangerous:
 # Hide the main menu with "Rerun", "run on Save", "clear cache", and "record a screencast"
@@ -38,7 +43,7 @@ def display_sidebar(st, d) -> Parameters:
         raise ValueError("Known cases must be larger than one to enable predictions.")
 
     current_hospitalized = st.sidebar.number_input(
-        "Currently Hospitalized COVID-19 Patients",
+        i18n.t("Currently Hospitalized COVID-19 Patients"),
         min_value=0,
         value=d.current_hospitalized,
         step=1,
@@ -46,7 +51,7 @@ def display_sidebar(st, d) -> Parameters:
     )
 
     doubling_time = st.sidebar.number_input(
-        "Doubling time before social distancing (days)",
+        i18n.t("Doubling time before social distancing (days)"),
         min_value=0,
         value=d.doubling_time,
         step=1,
@@ -55,7 +60,7 @@ def display_sidebar(st, d) -> Parameters:
 
     relative_contact_rate = (
         st.sidebar.number_input(
-            "Social distancing (% reduction in social contact)",
+            i18n.t("Social distancing (% reduction in social contact)"),
             min_value=0,
             max_value=100,
             value=d.relative_contact_rate * 100,
@@ -67,7 +72,7 @@ def display_sidebar(st, d) -> Parameters:
 
     hospitalized_rate = (
         st.sidebar.number_input(
-            "Hospitalization %(total infections)",
+            i18n.t("Hospitalization %(total infections)"),
             min_value=0.001,
             max_value=100.0,
             value=d.hospitalized.rate * 100,
@@ -77,7 +82,7 @@ def display_sidebar(st, d) -> Parameters:
     )
     icu_rate = (
         st.sidebar.number_input(
-            "ICU %(total infections)",
+            i18n.t("ICU %(total infections)"),
             min_value=0.0,
             max_value=100.0,
             value=d.icu.rate * 100,
@@ -88,7 +93,7 @@ def display_sidebar(st, d) -> Parameters:
     )
     ventilated_rate = (
         st.sidebar.number_input(
-            "Ventilated %(total infections)",
+            i18n.t("Ventilated %(total infections)"),
             min_value=0.0,
             max_value=100.0,
             value=d.ventilated.rate * 100,
@@ -99,21 +104,21 @@ def display_sidebar(st, d) -> Parameters:
     )
 
     hospitalized_los = st.sidebar.number_input(
-        "Hospital Length of Stay",
+        i18n.t("Hospital Length of Stay"),
         min_value=0,
         value=d.hospitalized.length_of_stay,
         step=1,
         format="%i",
     )
     icu_los = st.sidebar.number_input(
-        "ICU Length of Stay",
+        i18n.t("ICU Length of Stay"),
         min_value=0,
         value=d.icu.length_of_stay,
         step=1,
         format="%i",
     )
     ventilated_los = st.sidebar.number_input(
-        "Vent Length of Stay",
+        i18n.t("Vent Length of Stay"),
         min_value=0,
         value=d.ventilated.length_of_stay,
         step=1,
@@ -122,7 +127,7 @@ def display_sidebar(st, d) -> Parameters:
 
     market_share = (
         st.sidebar.number_input(
-            "Hospital Market Share (%)",
+            i18n.t("Hospital Market Share (%)"),
             min_value=0.001,
             max_value=100.0,
             value=d.market_share * 100,
@@ -132,7 +137,7 @@ def display_sidebar(st, d) -> Parameters:
         / 100.0
     )
     susceptible = st.sidebar.number_input(
-        "Regional Population",
+        i18n.t("Regional Population"),
         min_value=1,
         value=d.region.susceptible,
         step=100000,
@@ -140,7 +145,7 @@ def display_sidebar(st, d) -> Parameters:
     )
 
     known_infected = st.sidebar.number_input(
-        "Currently Known Regional Infections (only used to compute detection rate - does not change projections)",
+        i18n.t("Currently Known Regional Infections (only used to compute detection rate - does not change projections)"),
         min_value=0,
         value=d.known_infected,
         step=10,
@@ -180,8 +185,8 @@ display_header(
     r_t=p.r_t,
     doubling_time_t=p.doubling_time_t,
 )
-if st.checkbox("Show more info about this tool"):
-    notes = "The total size of the susceptible population will be the entire catchment area for Penn Medicine entities (HUP, PAH, PMC, CCH)"
+if st.checkbox(i18n.t("Show more info about this tool")):
+    notes = i18n.t("The total size of the susceptible population will be the entire catchment area for Penn Medicine entities (HUP, PAH, PMC, CCH)")
     show_more_info_about_this_tool(
         st=st,
         recovery_days=p.recovery_days,
@@ -192,13 +197,12 @@ if st.checkbox("Show more info about this tool"):
         r_t=p.r_t,
         inputs=DEFAULTS,
         notes=notes
-
     )
 
 # PRESENTATION
 # One more combination variable initialization / input element creation
 p.n_days = st.slider(
-    "Number of days to project",
+    i18n.t("Number of days to project"),
     min_value=30,
     max_value=200,
     value=DEFAULTS.n_days,
@@ -211,26 +215,26 @@ projection_admits = build_admissions_df(p.n_days, *p.dispositions)
 census_df = build_census_df(projection_admits, *p.lengths_of_stay)
 
 # PRESENTATION
-st.subheader("New Admissions")
-st.markdown("Projected number of **daily** COVID-19 admissions at Penn hospitals")
+st.subheader(i18n.t("New Admissions"))
+st.markdown(i18n.t("Projected number of **daily** COVID-19 admissions at Penn hospitals"))
 st.altair_chart(
     new_admissions_chart(alt, projection_admits, p.n_days - 10), use_container_width=True,
 )
-if st.checkbox("Show Projected Admissions in tabular form"):
+if st.checkbox(i18n.t("Show Projected Admissions in tabular form")):
     draw_projected_admissions_table(st, projection_admits)
-st.subheader("Admitted Patients (Census)")
+st.subheader(i18n.t("Admitted Patients (Census)"))
 st.markdown(
-    "Projected **census** of COVID-19 patients, accounting for arrivals and discharges at Penn hospitals"
+    i18n.t("Projected **census** of COVID-19 patients, accounting for arrivals and discharges at Penn hospitals")
 )
 st.altair_chart(admitted_patients_chart(alt, census_df, p.n_days - 10), use_container_width=True)
-if st.checkbox("Show Projected Census in tabular form"):
+if st.checkbox(i18n.t("Show Projected Census in tabular form")):
     draw_census_table(st, census_df)
 st.markdown(
-    """**Click the checkbox below to view additional data generated by this simulation**"""
+    i18n.t("""**Click the checkbox below to view additional data generated by this simulation**""")
 )
-if st.checkbox("Show Additional Projections"):
+if st.checkbox(i18n.t("Show Additional Projections")):
     show_additional_projections(st, alt, additional_projections_chart, p.infected_v, p.recovered_v)
-    if st.checkbox("Show Raw SIR Simulation Data"):
+    if st.checkbox(i18n.t("Show Raw SIR Simulation Data")):
         draw_raw_sir_simulation_table(st, p.n_days, p.susceptible_v, p.infected_v, p.recovered_v)
 write_definitions(st)
 write_footer(st)
