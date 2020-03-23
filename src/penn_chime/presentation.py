@@ -1,9 +1,3 @@
-<<<<<<< HEAD:penn_chime/presentation.py
-import altair as alt
-import numpy as np
-import pandas as pd
-import i18n
-=======
 """effectful functions for streamlit io"""
 
 from typing import Optional
@@ -11,14 +5,13 @@ from typing import Optional
 import altair as alt  # type: ignore
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
+import i18n # type: ignore
 
 from .defaults import Constants, RateLos
 from .utils import add_date_column
 from .parameters import Parameters
 
 DATE_FORMAT = "%b, %d"  # see https://strftime.org
->>>>>>> develop:src/penn_chime/presentation.py
-
 
 hide_menu_style = """
         <style>
@@ -44,36 +37,13 @@ def display_header(st, p):
         unsafe_allow_html=True,
     )
     st.markdown(
-<<<<<<< HEAD:penn_chime/presentation.py
         i18n.t("This tool was developed by...")
     )
 
     st.markdown(
         i18n.t("The estimated number of currently infected...").format(
-            total_infections=total_infections,
-            initial_infections=initial_infections,
-=======
-        """*This tool was developed by the [Predictive Healthcare team](http://predictivehealthcare.pennmedicine.org/) at
-    Penn Medicine. For questions on how to use this tool see the [User docs](https://code-for-philly.gitbook.io/chime/). For questions and comments please see our
-    [contact page](http://predictivehealthcare.pennmedicine.org/contact/). Code can be found on [Github](https://github.com/CodeForPhilly/chime).
-    Join our [Slack channel](https://codeforphilly.org/chat?channel=covid19-chime-penn) if you would like to get involved!*"""
-    )
-
-    st.markdown(
-        """The estimated number of currently infected individuals is **{total_infections:.0f}**. The **{initial_infections}**
-    confirmed cases in the region imply a **{detection_prob_str}** rate of detection. This is based on current inputs for
-    Hospitalizations (**{current_hosp}**), Hospitalization rate (**{hosp_rate:.0%}**), Region size (**{S}**),
-    and Hospital market share (**{market_share:.0%}**).
-
-An initial doubling time of **{doubling_time}** days and a recovery time of **{recovery_days}** days imply an $R_0$ of
-**{r_naught:.2f}**.
-
-**Mitigation**: A **{relative_contact_rate:.0%}** reduction in social contact after the onset of the
-outbreak reduces the doubling time to **{doubling_time_t:.1f}** days, implying an effective $R_t$ of **${r_t:.2f}$**.
-""".format(
             total_infections=p.infected,
             initial_infections=p.known_infected,
->>>>>>> develop:src/penn_chime/presentation.py
             detection_prob_str=detection_prob_str,
             current_hosp=p.current_hospitalized,
             hosp_rate=p.hospitalized.rate,
@@ -272,64 +242,20 @@ def show_more_info_about_this_tool(
     st.latex("\\beta = \\tau \\times c")
 
     st.markdown(
-<<<<<<< HEAD:penn_chime/presentation.py
         i18n.t("which is the transmissibility multiplied...").format(
-            recovery_days=int(recovery_days)
-=======
-        """which is the transmissibility ($\\tau$) multiplied by the average number of people exposed ($$c$$).  The transmissibility is the basic virulence of the pathogen.  The number of people exposed $c$ is the parameter that can be changed through social distancing.
-
-
-$\\gamma$ is the inverse of the mean recovery time, in days.  I.e.: if $\\gamma = 1/{recovery_days}$, then the average infection will clear in {recovery_days} days.
-
-An important descriptive parameter is the _basic reproduction number_, or $R_0$.  This represents the average number of people who will be infected by any given infected person.  When $R_0$ is greater than 1, it means that a disease will grow.  Higher $R_0$'s imply more rapid growth.  It is defined as """.format(
             recovery_days=int(parameters.recovery_days)
->>>>>>> develop:src/penn_chime/presentation.py
         )
     )
     st.latex("R_0 = \\beta /\\gamma")
 
     st.markdown(
-<<<<<<< HEAD:penn_chime/presentation.py
         i18n.t("$R_0$ gets bigger when...").format(
-            doubling_time=doubling_time,
-            recovery_days=recovery_days,
-            r_naught=r_naught,
-            relative_contact_rate=relative_contact_rate,
-            doubling_time_t=doubling_time_t,
-            r_t=r_t,
-=======
-        """
-
-$R_0$ gets bigger when
-
-- there are more contacts between people
-- when the pathogen is more virulent
-- when people have the pathogen for longer periods of time
-
-A doubling time of {doubling_time} days and a recovery time of {recovery_days} days imply an $R_0$ of {r_naught:.2f}.
-
-#### Effect of social distancing
-
-After the beginning of the outbreak, actions to reduce social contact will lower the parameter $c$.  If this happens at
-time $t$, then the number of people infected by any given infected person is $R_t$, which will be lower than $R_0$.
-
-A {relative_contact_rate:.0%} reduction in social contact would increase the time it takes for the outbreak to double,
-to {doubling_time_t:.2f} days from {doubling_time:.2f} days, with a $R_t$ of {r_t:.2f}.
-
-#### Using the model
-
-We need to express the two parameters $\\beta$ and $\\gamma$ in terms of quantities we can estimate.
-
-- $\\gamma$:  the CDC is recommending 14 days of self-quarantine, we'll use $\\gamma = 1/{recovery_days}$.
-- To estimate $$\\beta$$ directly, we'd need to know transmissibility and social contact rates.  since we don't know these things, we can extract it from known _doubling times_.  The AHA says to expect a doubling time $T_d$ of 7-10 days. That means an early-phase rate of growth can be computed by using the doubling time formula:
-""".format(
             doubling_time=parameters.doubling_time,
             recovery_days=parameters.recovery_days,
             r_naught=parameters.r_naught,
             relative_contact_rate=parameters.relative_contact_rate,
             doubling_time_t=parameters.doubling_time_t,
             r_t=parameters.r_t,
->>>>>>> develop:src/penn_chime/presentation.py
         )
     )
     st.latex("g = 2^{1/T_d} - 1")

@@ -21,6 +21,7 @@ ja:
     </div>
   "This tool was developed by...": |+
     *このツールはペンシルバニア州立大学の医療部門であるPenn Medicineの、[予測医療チーム](http://predictivehealthcare.pennmedicine.org/)によって開発されました。
+    このツールをどのように使うかについては、[ドキュメントページ](https://code-for-philly.gitbook.io/chime/)を見てください。
     質問やコメントは我々の[コンタクトページ](http://predictivehealthcare.pennmedicine.org/contact/)で受け付けています(英語のみ)。
     ソースコードは[Github](https://github.com/CodeForPhilly/chime)で配布されています。
     開発に参加したい場合は是非我々の[Slackチャンネル](https://codeforphilly.org/chat?channel=covid19-chime-penn)に参加してください！*
