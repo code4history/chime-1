@@ -4,6 +4,7 @@ from typing import Generator, Tuple
 
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
+import i18n  # type: ignore
 
 
 def sir(
@@ -62,7 +63,7 @@ def sim_sir_df(p) -> pd.DataFrame:
     """
     return pd.DataFrame(
         data=gen_sir(p.susceptible, p.infected, p.recovered, p.beta, p.gamma, p.n_days),
-        columns=("Susceptible", "Infected", "Recovered"),
+        columns=(i18n.t("Susceptible"), i18n.t("Infected"), i18n.t("Recovered")),
     )
 
 
@@ -78,7 +79,7 @@ def build_admissions_df(p) -> pd.DataFrame:
     days = np.array(range(0, p.n_days + 1))
     data_dict = dict(
         zip(
-            ["day", "Hospitalized", "ICU", "Ventilated"],
+            ["day", i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated")],
             [days] + [disposition for disposition in p.dispositions],
         )
     )
@@ -94,9 +95,9 @@ def build_census_df(projection_admits: pd.DataFrame, parameters) -> pd.DataFrame
     n_days = np.shape(projection_admits)[0]
     hosp_los, icu_los, vent_los = parameters.lengths_of_stay
     los_dict = {
-        "Hospitalized": hosp_los,
-        "ICU": icu_los,
-        "Ventilated": vent_los,
+        i18n.t("Hospitalized"): hosp_los,
+        i18n.t("ICU"): icu_los,
+        i18n.t("Ventilated"): vent_los,
     }
 
     census_dict = dict()
@@ -109,12 +110,12 @@ def build_census_df(projection_admits: pd.DataFrame, parameters) -> pd.DataFrame
 
     census_df = pd.DataFrame(census_dict)
     census_df["day"] = census_df.index
-    census_df = census_df[["day", "Hospitalized", "ICU", "Ventilated"]]
+    census_df = census_df[["day", i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated")]]
     census_df = census_df.head(n_days)
     census_df = census_df.rename(
         columns={
             disposition: f"{disposition}"
-            for disposition in ("Hospitalized", "ICU", "Ventilated")
+            for disposition in (i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated"))
         }
     )
     return census_df
