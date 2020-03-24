@@ -1,13 +1,18 @@
 
 from math import ceil
 import datetime
+
 from altair import Chart  # type: ignore
 import pandas as pd  # type: ignore
+<<<<<<< HEAD
 import numpy as np  # type: ignore
 import i18n  # type: ignore
+=======
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
 
 from .parameters import Parameters
 from .utils import add_date_column
+from .presentation import DATE_FORMAT
 
 
 def new_admissions_chart(
@@ -27,13 +32,22 @@ def new_admissions_chart(
     tooltip_dict = {False: "day", True: "date:T"}
     if as_date:
         projection_admits = add_date_column(projection_admits)
+<<<<<<< HEAD
         x_kwargs = {"shorthand": "date:T", "title": i18n.t("Date")}
+=======
+        x_kwargs = {"shorthand": "date:T", "title": "Date", "axis": alt.Axis(format=(DATE_FORMAT))}
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     else:
         x_kwargs = {"shorthand": "day", "title": i18n.t("Days from today")}
 
+    # TODO fix the fold to allow any number of dispositions
     return (
         alt.Chart(projection_admits.head(plot_projection_days))
+<<<<<<< HEAD
         .transform_fold(fold=[i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated")])
+=======
+        .transform_fold(fold=["hospitalized", "icu", "ventilated"])
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
         .mark_line(point=True)
         .encode(
             x=alt.X(**x_kwargs),
@@ -59,7 +73,11 @@ def admitted_patients_chart(
     as_date = parameters.as_date
     if as_date:
         census = add_date_column(census)
+<<<<<<< HEAD
         x_kwargs = {"shorthand": "date:T", "title": i18n.t("Date")}
+=======
+        x_kwargs = {"shorthand": "date:T", "title": "Date", "axis": alt.Axis(format=(DATE_FORMAT))}
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
         idx = "date:T"
     else:
         x_kwargs = {"shorthand": "day", "title": i18n.t("Days from today")}
@@ -71,9 +89,14 @@ def admitted_patients_chart(
         y_scale.domain = (0, max_y_axis)
         y_scale.clamp = True
 
+    # TODO fix the fold to allow any number of dispositions
     return (
         alt.Chart(census.head(plot_projection_days))
+<<<<<<< HEAD
         .transform_fold(fold=[i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated")])
+=======
+        .transform_fold(fold=["hospitalized", "icu", "ventilated"])
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
         .mark_line(point=True)
         .encode(
             x=alt.X(**x_kwargs),
@@ -90,11 +113,21 @@ def admitted_patients_chart(
 
 
 def additional_projections_chart(
-    alt, parameters: Parameters
+    alt, model, parameters
 ) -> Chart:
+<<<<<<< HEAD
     i = parameters.infected_v
     r = parameters.recovered_v
     dat = pd.DataFrame({i18n.t("Infected"): i, i18n.t("Recovered"): r})
+=======
+
+    # TODO use subselect of df_raw instead of creating a new df
+    raw_df = model.raw_df
+    dat = pd.DataFrame({
+        "infected": raw_df.infected,
+        "recovered": raw_df.recovered
+    })
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     dat["day"] = dat.index
 
     as_date = parameters.as_date
@@ -102,7 +135,11 @@ def additional_projections_chart(
 
     if as_date:
         dat = add_date_column(dat)
+<<<<<<< HEAD
         x_kwargs = {"shorthand": "date:T", "title": i18n.t("Date")}
+=======
+        x_kwargs = {"shorthand": "date:T", "title": "Date", "axis": alt.Axis(format=(DATE_FORMAT))}
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     else:
         x_kwargs = {"shorthand": "day", "title": i18n.t("Days from today")}
 
@@ -114,7 +151,11 @@ def additional_projections_chart(
 
     return (
         alt.Chart(dat)
+<<<<<<< HEAD
         .transform_fold(fold=[i18n.t("Infected"), i18n.t("Recovered")])
+=======
+        .transform_fold(fold=["infected", "recovered"])
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
         .mark_line()
         .encode(
             x=alt.X(**x_kwargs),
@@ -126,7 +167,7 @@ def additional_projections_chart(
     )
 
 
-def chart_descriptions(chart: Chart, suffix: str = ""):
+def chart_descriptions(chart: Chart, labels, suffix: str = ""):
     """
 
     :param chart: Chart: The alt chart to be used in finding max points
@@ -137,7 +178,11 @@ def chart_descriptions(chart: Chart, suffix: str = ""):
     """
     messages = []
 
+<<<<<<< HEAD
     cols = [i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated")]
+=======
+    cols = ["hospitalized", "icu", "ventilated"]
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     asterisk = False
     day = "date" if "date" in chart.data.columns else "day"
 
@@ -152,8 +197,13 @@ def chart_descriptions(chart: Chart, suffix: str = ""):
             on += 1  # 0 index issue
 
         messages.append(
+<<<<<<< HEAD
             i18n.t("{}{} peaks at {:,} on day {}{}").format(
                 col,
+=======
+            "{}{} peaks at {:,} on day {}{}".format(
+                labels[col],
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
                 suffix,
                 ceil(chart.data[col].max()),
                 on,

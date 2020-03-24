@@ -19,11 +19,13 @@ from penn_chime.presentation import (
     write_footer,
 )
 from penn_chime.settings import DEFAULTS
-from penn_chime.models import sim_sir_df, build_admissions_df, build_census_df
-from penn_chime.charts import (additional_projections_chart,
-                               admitted_patients_chart,
-                               new_admissions_chart,
-                               chart_descriptions)
+from penn_chime.models import SimSirModel
+from penn_chime.charts import (
+    additional_projections_chart,
+    admitted_patients_chart,
+    new_admissions_chart,
+    chart_descriptions
+)
 
 i18n.set('filename_format', '{locale}.{format}')
 i18n.set('locale', 'ja')
@@ -37,9 +39,11 @@ i18n.load_path.append(os.path.dirname(__file__) + '/../locales')
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 p = display_sidebar(st, DEFAULTS)
+m = SimSirModel(p)
 
-display_header(st, p)
+display_header(st, m, p)
 
+<<<<<<< HEAD
 if st.checkbox(i18n.t("Show more info about this tool")):
     notes = i18n.t("The total size of the susceptible population will be the entire catchment area for Penn Medicine entities (HUP, PAH, PMC, CCH)")
     show_more_info_about_this_tool(st=st, parameters=p, inputs=DEFAULTS, notes=notes)
@@ -53,39 +57,63 @@ census_df = build_census_df(admissions_df, parameters=p)
 st.subheader(i18n.t("New Admissions"))
 st.markdown(i18n.t("Projected number of **daily** COVID-19 admissions at Penn hospitals"))
 new_admit_chart = new_admissions_chart(alt, admissions_df, parameters=p)
+=======
+if st.checkbox("Show more info about this tool"):
+    notes = "The total size of the susceptible population will be the entire catchment area for Penn Medicine entities (HUP, PAH, PMC, CCH)"
+    show_more_info_about_this_tool(st=st, model=m, parameters=p, defaults=DEFAULTS, notes=notes)
+
+st.subheader("New Admissions")
+st.markdown("Projected number of **daily** COVID-19 admissions at Penn hospitals")
+new_admit_chart = new_admissions_chart(alt, m.admits_df, parameters=p)
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
 st.altair_chart(
-    new_admit_chart, use_container_width=True
+    new_admissions_chart(alt, m.admits_df, parameters=p),
+    use_container_width=True,
 )
 
-st.markdown(chart_descriptions(new_admit_chart))
+st.markdown(chart_descriptions(new_admit_chart, p.labels))
 
+<<<<<<< HEAD
 if st.checkbox(i18n.t("Show Projected Admissions in tabular form")):
     if st.checkbox(i18n.t("Show Daily Counts")):
         draw_projected_admissions_table(st, admissions_df, as_date=p.as_date, daily_count=True)
+=======
+if st.checkbox("Show Projected Admissions in tabular form"):
+    if st.checkbox("Show Daily Counts"):
+        draw_projected_admissions_table(st, m.admits_df, p.labels, as_date=p.as_date, daily_count=True)
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     else:
-        draw_projected_admissions_table(st, admissions_df, as_date=p.as_date, daily_count=False)
+        draw_projected_admissions_table(st, m.admits_df, p.labels, as_date=p.as_date, daily_count=False)
     build_download_link(st,
         filename="projected_admissions.csv",
-        df=admissions_df,
+        df=m.admits_df,
         parameters=p
     )
 st.subheader(i18n.t("Admitted Patients (Census)"))
 st.markdown(
     i18n.t("Projected **census** of COVID-19 patients, accounting for arrivals and discharges at Penn hospitals")
 )
-census_chart = admitted_patients_chart(alt=alt, census=census_df, parameters=p)
+census_chart = admitted_patients_chart(alt=alt, census=m.census_df, parameters=p)
 st.altair_chart(
-    census_chart, use_container_width=True
+    admitted_patients_chart(alt=alt, census=m.census_df, parameters=p),
+    use_container_width=True,
 )
+<<<<<<< HEAD
 st.markdown(chart_descriptions(census_chart, suffix=i18n.t(" Census")))
 if st.checkbox(i18n.t("Show Projected Census in tabular form")):
     if st.checkbox(i18n.t("Show Daily Census Counts")):
         draw_census_table(st, admissions_df, as_date=p.as_date, daily_count=True)
+=======
+st.markdown(chart_descriptions(census_chart, p.labels, suffix=" Census"))
+if st.checkbox("Show Projected Census in tabular form"):
+    if st.checkbox("Show Daily Census Counts"):
+        draw_census_table(st, m.census_df, p.labels, as_date=p.as_date, daily_count=True)
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     else:
-        draw_census_table(st, census_df, as_date=p.as_date, daily_count=False)
+        draw_census_table(st, m.census_df, p.labels, as_date=p.as_date, daily_count=False)
     build_download_link(st,
         filename="projected_census.csv",
-        df=census_df,
+        df=m.census_df,
         parameters=p
     )
 
@@ -94,9 +122,14 @@ st.markdown(
 )
 if st.checkbox(i18n.t("Show Additional Projections")):
     show_additional_projections(
-        st, alt, additional_projections_chart, parameters=p
+        st, alt, additional_projections_chart, model=m, parameters=p
     )
+<<<<<<< HEAD
     if st.checkbox(i18n.t("Show Raw SIR Simulation Data")):
         draw_raw_sir_simulation_table(st, parameters=p)
+=======
+    if st.checkbox("Show Raw SIR Simulation Data"):
+        draw_raw_sir_simulation_table(st, model=m, parameters=p)
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
 write_definitions(st)
 write_footer(st)

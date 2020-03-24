@@ -25,11 +25,11 @@ hide_menu_style = """
 ########
 
 
-def display_header(st, p):
+def display_header(st, m, p):
 
     detection_prob_str = (
-        "{detection_prob:.0%}".format(detection_prob=p.detection_probability)
-        if p.detection_probability
+        "{detection_prob:.0%}".format(detection_prob=m.detection_probability)
+        if m.detection_probability
         else "unknown"
     )
     st.markdown(
@@ -44,8 +44,23 @@ def display_header(st, p):
     )
 
     st.markdown(
+<<<<<<< HEAD
         i18n.t("The estimated number of currently infected...").format(
             total_infections=p.infected,
+=======
+        """The estimated number of currently infected individuals is **{total_infections:.0f}**. The **{initial_infections}**
+    confirmed cases in the region imply a **{detection_prob_str}** rate of detection. This is based on current inputs for
+    Hospitalizations (**{current_hosp}**), Hospitalization rate (**{hosp_rate:.0%}**), Region size (**{S}**),
+    and Hospital market share (**{market_share:.0%}**).
+
+An initial doubling time of **{doubling_time}** days and a recovery time of **{recovery_days}** days imply an $R_0$ of
+**{r_naught:.2f}**.
+
+**Mitigation**: A **{relative_contact_rate:.0%}** reduction in social contact after the onset of the
+outbreak **{impact_statement:s} {doubling_time_t:.1f}** days, implying an effective $R_t$ of **${r_t:.2f}$**.
+""".format(
+            total_infections=m.infected,
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
             initial_infections=p.known_infected,
             detection_prob_str=detection_prob_str,
             current_hosp=p.current_hospitalized,
@@ -53,11 +68,12 @@ def display_header(st, p):
             S=p.susceptible,
             market_share=p.market_share,
             recovery_days=p.recovery_days,
-            r_naught=p.r_naught,
+            r_naught=m.r_naught,
             doubling_time=p.doubling_time,
             relative_contact_rate=p.relative_contact_rate,
-            r_t=p.r_t,
-            doubling_time_t=p.doubling_time_t,
+            r_t=m.r_t,
+            doubling_time_t=abs(m.doubling_time_t),
+            impact_statement=("halves the infections every" if m.r_t < 1 else "reduces the doubling time to")
         )
     )
 
@@ -102,7 +118,7 @@ def display_sidebar(st, d: Constants) -> Parameters:
             i18n.t("Social distancing (% reduction in social contact)"),
             min_value=0,
             max_value=100,
-            value=d.relative_contact_rate * 100,
+            value=int(d.relative_contact_rate * 100),
             step=5,
             format="%i",
         )
@@ -202,22 +218,23 @@ def display_sidebar(st, d: Constants) -> Parameters:
         )
 
     return Parameters(
-        n_days=n_days,
+        as_date=as_date,
         current_hospitalized=current_hospitalized,
         doubling_time=doubling_time,
         known_infected=known_infected,
         market_share=market_share,
+        max_y_axis=max_y_axis,
+        n_days=n_days,
         relative_contact_rate=relative_contact_rate,
         susceptible=susceptible,
+
         hospitalized=RateLos(hospitalized_rate, hospitalized_los),
         icu=RateLos(icu_rate, icu_los),
         ventilated=RateLos(ventilated_rate, ventilated_los),
-        max_y_axis=max_y_axis,
-        as_date=as_date,
     )
 
 
-def show_more_info_about_this_tool(st, parameters, inputs: Constants, notes: str = ""):
+def show_more_info_about_this_tool(st, model, parameters, defaults, notes: str = ""):
     """a lot of streamlit writing to screen."""
     st.subheader(
         i18n.t("Discrete-time SIR modeling")
@@ -247,10 +264,10 @@ def show_more_info_about_this_tool(st, parameters, inputs: Constants, notes: str
         i18n.t("$R_0$ gets bigger when...").format(
             doubling_time=parameters.doubling_time,
             recovery_days=parameters.recovery_days,
-            r_naught=parameters.r_naught,
+            r_naught=model.r_naught,
             relative_contact_rate=parameters.relative_contact_rate,
-            doubling_time_t=parameters.doubling_time_t,
-            r_t=parameters.r_t,
+            doubling_time_t=model.doubling_time_t,
+            r_t=model.r_t,
         )
     )
     st.latex("g = 2^{1/T_d} - 1")
@@ -262,7 +279,7 @@ def show_more_info_about_this_tool(st, parameters, inputs: Constants, notes: str
         + "- "
         + "| \n".join(
             f"{key} = {value} "
-            for key, value in inputs.region.__dict__.items()
+            for key, value in defaults.region.__dict__.items()
             if key != "_s"
         )
     )
@@ -285,7 +302,7 @@ def write_footer(st):
 
 
 def show_additional_projections(
-    st, alt, charting_func, parameters
+    st, alt, charting_func, model, parameters
 ):
     st.subheader(
         i18n.t("The number of infected and recovered individuals in the hospital catchment region at any given moment")
@@ -294,6 +311,7 @@ def show_additional_projections(
     st.altair_chart(
         charting_func(
             alt,
+            model=model,
             parameters=parameters
         ),
         use_container_width=True,
@@ -306,7 +324,7 @@ def show_additional_projections(
 
 
 def draw_projected_admissions_table(
-    st, projection_admits: pd.DataFrame, as_date: bool = False, daily_count: bool = False,
+    st, projection_admits: pd.DataFrame, labels, as_date: bool = False, daily_count: bool = False,
 ):
     if daily_count == True:
         admits_table = projection_admits[np.mod(projection_admits.index, 1) == 0].copy()
@@ -320,11 +338,12 @@ def draw_projected_admissions_table(
         admits_table = add_date_column(
             admits_table, drop_day_column=True, date_format=DATE_FORMAT
         )
+    admits_table.rename(labels)
     st.table(admits_table)
     return None
 
 
-def draw_census_table(st, census_df: pd.DataFrame, as_date: bool = False, daily_count: bool = False):
+def draw_census_table(st, census_df: pd.DataFrame, labels, as_date: bool = False, daily_count: bool = False):
     if daily_count == True:
         census_table = census_df[np.mod(census_df.index, 1) == 0].copy()
     else:
@@ -338,12 +357,14 @@ def draw_census_table(st, census_df: pd.DataFrame, as_date: bool = False, daily_
             census_table, drop_day_column=True, date_format=DATE_FORMAT
         )
 
+    census_table.rename(labels)
     st.table(census_table)
     return None
 
 
-def draw_raw_sir_simulation_table(st, parameters):
+def draw_raw_sir_simulation_table(st, model, parameters):
     as_date = parameters.as_date
+<<<<<<< HEAD
     days = np.arange(0, parameters.n_days + 1)
     data_list = [
         days,
@@ -353,6 +374,9 @@ def draw_raw_sir_simulation_table(st, parameters):
     ]
     data_dict = dict(zip(["day", i18n.t("Susceptible"), i18n.t("Infections"), i18n.t("Recovered")], data_list))
     projection_area = pd.DataFrame.from_dict(data_dict)
+=======
+    projection_area = model.raw_df
+>>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     infect_table = (projection_area.iloc[::7, :]).apply(np.floor)
     infect_table.index = range(infect_table.shape[0])
     infect_table["day"] = infect_table.day.astype(int)
