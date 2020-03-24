@@ -8,7 +8,7 @@ import pandas as pd  # type: ignore
 import i18n # type: ignore
 
 from .defaults import Constants, RateLos
-from .utils import add_date_column
+from .utils import add_date_column, dataframe_to_base64
 from .parameters import Parameters
 
 DATE_FORMAT = "%b, %d"  # see https://strftime.org
@@ -37,7 +37,7 @@ def display_header(st, p):
         unsafe_allow_html=True,
     )
     st.markdown(
-        i18n.t("Admissions and Census calculations were...")
+        i18n.t("Admissions and Census calculations were...").format(p.change_date())
     )
     st.markdown(
         i18n.t("This tool was developed by...")
@@ -72,6 +72,14 @@ def display_sidebar(st, d: Constants) -> Parameters:
 
     if d.known_infected < 1:
         raise ValueError(i18n.t("Known cases must be larger than one to enable predictions."))
+
+    n_days = st.sidebar.number_input(
+        i18n.t("Number of days to project"),
+        min_value=30,
+        value=d.n_days,
+        step=10,
+        format="%i",
+    )
 
     current_hospitalized = st.sidebar.number_input(
         i18n.t("Currently Hospitalized COVID-19 Patients"),
@@ -184,14 +192,17 @@ def display_sidebar(st, d: Constants) -> Parameters:
         format="%i",
     )
 
+    as_date = st.sidebar.checkbox(label=i18n.t("Present result as dates instead of days"), value=False)
+
     max_y_axis_set = st.sidebar.checkbox(i18n.t("Set the Y-axis on graphs to a static value"))
     max_y_axis = None
     if max_y_axis_set:
         max_y_axis = st.sidebar.number_input(
-            "Y-axis static value", value=500, format="%i", step=25,
+            i18n.t("Y-axis static value"), value=500, format="%i", step=25,
         )
 
     return Parameters(
+        n_days=n_days,
         current_hospitalized=current_hospitalized,
         doubling_time=doubling_time,
         known_infected=known_infected,
@@ -202,18 +213,7 @@ def display_sidebar(st, d: Constants) -> Parameters:
         icu=RateLos(icu_rate, icu_los),
         ventilated=RateLos(ventilated_rate, ventilated_los),
         max_y_axis=max_y_axis,
-    )
-
-
-def display_n_days_slider(st, p: Parameters, d: Constants):
-    """Display n_days_slider."""
-    p.n_days = st.slider(
-        i18n.t("Number of days to project"),
-        min_value=30,
-        max_value=200,
-        value=d.n_days,
-        step=1,
-        format="%i",
+        as_date=as_date,
     )
 
 
@@ -285,7 +285,7 @@ def write_footer(st):
 
 
 def show_additional_projections(
-    st, alt, charting_func, parameters, as_date: bool = False,
+    st, alt, charting_func, parameters
 ):
     st.subheader(
         i18n.t("The number of infected and recovered individuals in the hospital catchment region at any given moment")
@@ -294,10 +294,7 @@ def show_additional_projections(
     st.altair_chart(
         charting_func(
             alt,
-            parameters.infected_v,
-            parameters.recovered_v,
-            as_date=as_date,
-            max_y_axis=parameters.max_y_axis,
+            parameters=parameters
         ),
         use_container_width=True,
     )
@@ -309,9 +306,12 @@ def show_additional_projections(
 
 
 def draw_projected_admissions_table(
-    st, projection_admits: pd.DataFrame, as_date: bool = False
+    st, projection_admits: pd.DataFrame, as_date: bool = False, daily_count: bool = False,
 ):
-    admits_table = projection_admits[np.mod(projection_admits.index, 7) == 0].copy()
+    if daily_count == True:
+        admits_table = projection_admits[np.mod(projection_admits.index, 1) == 0].copy()
+    else:
+        admits_table = projection_admits[np.mod(projection_admits.index, 7) == 0].copy()
     admits_table["day"] = admits_table.index
     admits_table.index = range(admits_table.shape[0])
     admits_table = admits_table.fillna(0).astype(int)
@@ -320,13 +320,15 @@ def draw_projected_admissions_table(
         admits_table = add_date_column(
             admits_table, drop_day_column=True, date_format=DATE_FORMAT
         )
-
     st.table(admits_table)
     return None
 
 
-def draw_census_table(st, census_df: pd.DataFrame, as_date: bool = False):
-    census_table = census_df[np.mod(census_df.index, 7) == 0].copy()
+def draw_census_table(st, census_df: pd.DataFrame, as_date: bool = False, daily_count: bool = False):
+    if daily_count == True:
+        census_table = census_df[np.mod(census_df.index, 1) == 0].copy()
+    else:
+        census_table = census_df[np.mod(census_df.index, 7) == 0].copy()
     census_table.index = range(census_table.shape[0])
     census_table.loc[0, :] = 0
     census_table = census_table.dropna().astype(int)
@@ -340,7 +342,8 @@ def draw_census_table(st, census_df: pd.DataFrame, as_date: bool = False):
     return None
 
 
-def draw_raw_sir_simulation_table(st, parameters, as_date: bool = False):
+def draw_raw_sir_simulation_table(st, parameters):
+    as_date = parameters.as_date
     days = np.arange(0, parameters.n_days + 1)
     data_list = [
         days,
@@ -360,3 +363,17 @@ def draw_raw_sir_simulation_table(st, parameters, as_date: bool = False):
         )
 
     st.table(infect_table)
+    build_download_link(st,
+        filename="raw_sir_simulation_data.csv",
+        df=projection_area,
+        parameters=parameters
+    )
+
+def build_download_link(st, filename: str, df: pd.DataFrame, parameters: Parameters):
+    if parameters.as_date:
+        df = add_date_column(df, drop_day_column=True, date_format="%Y-%m-%d")
+
+    csv = dataframe_to_base64(df)
+    st.markdown("""
+        <a download="{filename}" href="data:file/csv;base64,{csv}">{description}</a>
+""".format(csv=csv,filename=filename, description=i18n.t("Download full table as CSV")), unsafe_allow_html=True)

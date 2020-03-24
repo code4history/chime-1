@@ -19,11 +19,10 @@ ja:
     title="Penn Medicineのホームページへ行く">Penn Medicine</a>
     <a id="title" class="penn-medicine-header__title">Penn Medicine - COVID-19における伝染病の病院影響モデル</a>
     </div>
-  "Admissions and Census calculations were...": "**重要な注意**: 入院患者数と統計患者数の数値は、以前は**割り引いて**計算されていました。レポートを更新してください。この問題の詳細については、[ここ](https://github.com/CodeForPhilly/chime/pull/190)を参照してください。"
+  "Admissions and Census calculations were...": "**重要な注意**: 入院患者数と統計患者数の数値は、以前は**割り引いて**計算されていました。{0}より前に生成されたレポートは更新してください。この問題の詳細については、[ここ](https://github.com/CodeForPhilly/chime/labels/models)を参照してください。"
   "This tool was developed by...": |+
     *このツールはペンシルバニア州立大学の医療部門であるPenn Medicineの、[予測医療チーム](http://predictivehealthcare.pennmedicine.org/)によって開発されました。
     このツールをどのように使うかについては、[ドキュメントページ](https://code-for-philly.gitbook.io/chime/)を見てください。
-    質問やコメントは我々の[コンタクトページ](http://predictivehealthcare.pennmedicine.org/contact/)で受け付けています(英語のみ)。
     ソースコードは[Github](https://github.com/CodeForPhilly/chime)で配布されています。
     開発に参加したい場合は是非我々の[Slackチャンネル](https://codeforphilly.org/chat?channel=covid19-chime-penn)に参加してください！*
   "The estimated number of currently infected...": |+
@@ -107,6 +106,7 @@ ja:
   "ICU Census": "統計 集中治療室患者数"
   "Ventilated Census": "統計 人工呼吸器患者数"
   "Census": "統計数"
+  " Census": "統計"
   "Show Projected Census in tabular form": "予測された統計数を表形式で見る"
   "Infected": "感染者数"
   "Infections": "感染者数"
@@ -141,3 +141,9 @@ ja:
   "Set the Y-axis on graphs to a static value": "グラフのY軸最大値を固定値にします。"
   "Date": "日付"
   "Present result as dates instead of days": "結果を日数ではなく日付で表示"
+  "Y-axis static value": "Y軸固定値"
+  "{}{} peaks at {:,} on day {}{}": "{0}{1}のピークは{2:,}人で、{3}日目に現れます。{4}"
+  "_* The max is at the upper bound of the data, and therefore may not be the actual max_": "_* 最大値はデータの上限であるため、実際の最大値ではない場合があります_"
+  "Show Daily Counts": "毎日の患者数を表示"
+  "Show Daily Census Counts": "毎日の統計患者数を表示"
+  "Download full table as CSV": "全テーブルをCSV形式でダウンロード"

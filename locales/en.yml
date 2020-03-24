@@ -19,11 +19,10 @@ en:
             title="Go to the Penn Medicine home page">Penn Medicine</a>
         <a id="title" class="penn-medicine-header__title">Penn Medicine - COVID-19 Hospital Impact Model for Epidemics</a>
     </div>
-  "Admissions and Census calculations were...": "**IMPORTANT NOTICE**: Admissions and Census calculations were previously **undercounting**. Please update your reports. See more about this issue [here](https://github.com/CodeForPhilly/chime/pull/190)."
+  "Admissions and Census calculations were...": "**IMPORTANT NOTICE**: Admissions and Census calculations were previously **undercounting**. Please update your reports generated before {0}. See more about changes [here](https://github.com/CodeForPhilly/chime/labels/models)."
   "This tool was developed by...": |+
     *This tool was developed by the [Predictive Healthcare team](http://predictivehealthcare.pennmedicine.org/) at
-    Penn Medicine. For questions on how to use this tool see the [User docs](https://code-for-philly.gitbook.io/chime/). For questions and comments please see our
-    [contact page](http://predictivehealthcare.pennmedicine.org/contact/). Code can be found on [Github](https://github.com/CodeForPhilly/chime).
+    Penn Medicine. For questions on how to use this tool see the [User docs](https://code-for-philly.gitbook.io/chime/). Code can be found on [Github](https://github.com/CodeForPhilly/chime).
     Join our [Slack channel](https://codeforphilly.org/chat?channel=covid19-chime-penn) if you would like to get involved!*
   "The estimated number of currently infected...": |+
     The estimated number of currently infected individuals is **{total_infections:.0f}**. The **{initial_infections}**
@@ -109,6 +108,7 @@ en:
   "ICU Census": "ICU Census"
   "Ventilated Census": "Ventilated Census"
   "Census": "Census"
+  " Census": " Census"
   "Show Projected Census in tabular form": "Show Projected Census in tabular form"
   "Infected": "Infected"
   "Infections": "Infections"
@@ -143,3 +143,10 @@ en:
   "Set the Y-axis on graphs to a static value": "Set the Y-axis on graphs to a static value"
   "Date": "Date"
   "Present result as dates instead of days": "Present result as dates instead of days"
+  "Y-axis static value": "Y-axis static value"
+  "{}{} peaks at {:,} on day {}{}": "{}{} peaks at {:,} on day {}{}"
+  "_* The max is at the upper bound of the data, and therefore may not be the actual max_": "_* The max is at the upper bound of the data, and therefore may not be the actual max_"
+  "Show Daily Counts": "Show Daily Counts"
+  "Show Daily Census Counts": "Show Daily Census Counts"
+  "Download full table as CSV": "Download full table as CSV"
+
