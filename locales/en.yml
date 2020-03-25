@@ -34,7 +34,7 @@ en:
     **{r_naught:.2f}**.
 
     **Mitigation**: A **{relative_contact_rate:.0%}** reduction in social contact after the onset of the
-    outbreak reduces the doubling time to **{doubling_time_t:.1f}** days, implying an effective $R_t$ of **${r_t:.2f}$**.
+    outbreak **{impact_statement:s} {doubling_time_t:.1f}** days, implying an effective $R_t$ of **${r_t:.2f}$**.
   "Show more info about this tool": "Show more info about this tool"
   "Discrete-time SIR modeling": "[Discrete-time SIR modeling](https://mathworld.wolfram.com/SIRModel.html) of infections/recovery"
   "The model consists of individuals who are either...": |+

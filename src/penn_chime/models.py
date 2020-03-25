@@ -124,35 +124,12 @@ def sim_sir_df(
 ) -> pd.DataFrame:
     """Simulate the SIR model forward in time."""
     return pd.DataFrame(
-<<<<<<< HEAD
-        data=gen_sir(p.susceptible, p.infected, p.recovered, p.beta, p.gamma, p.n_days),
-        columns=(i18n.t("Susceptible"), i18n.t("Infected"), i18n.t("Recovered")),
-=======
         data=gen_sir(s, i, r, beta, gamma, n_days),
-        columns=("day", "susceptible", "infected", "recovered"),
->>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
+        columns=("day", i18n.t("susceptible"), i18n.t("infected"), i18n.t("recovered")),
     )
 
 
 def get_dispositions(
-<<<<<<< HEAD
-    patient_state: np.ndarray, rates: Tuple[float, ...], market_share: float = 1.0
-) -> Tuple[np.ndarray, ...]:
-    """Get dispositions of infected adjusted by rate and market_share."""
-    return (*(patient_state * rate * market_share for rate in rates),)
-
-
-def build_admissions_df(p) -> pd.DataFrame:
-    """Build admissions dataframe from Parameters."""
-    days = np.array(range(0, p.n_days + 1))
-    data_dict = dict(
-        zip(
-            ["day", i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated")],
-            [days] + [disposition for disposition in p.dispositions],
-        )
-    )
-    projection = pd.DataFrame.from_dict(data_dict)
-=======
     patients: np.ndarray,
     rates: Dict[str, float],
     market_share: float,
@@ -171,7 +148,6 @@ def build_admits_df(n_days, dispositions) -> pd.DataFrame:
         "day": days,
         **dispositions,
     })
->>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     # New cases
     admits_df = projection.iloc[:-1, :] - projection.shift(1)
     admits_df["day"] = range(admits_df.shape[0])
@@ -182,22 +158,9 @@ def build_census_df(
     admits_df: pd.DataFrame, lengths_of_stay
 ) -> pd.DataFrame:
     """ALOS for each category of COVID-19 case (total guesses)"""
-<<<<<<< HEAD
-    n_days = np.shape(projection_admits)[0]
-    hosp_los, icu_los, vent_los = parameters.lengths_of_stay
-    los_dict = {
-        i18n.t("Hospitalized"): hosp_los,
-        i18n.t("ICU"): icu_los,
-        i18n.t("Ventilated"): vent_los,
-    }
-
-    census_dict = dict()
-    for k, los in los_dict.items():
-=======
     n_days = np.shape(admits_df)[0]
     census_dict = {}
     for key, los in lengths_of_stay.items():
->>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
         census = (
             admits_df.cumsum().iloc[:-los, :]
             - admits_df.cumsum().shift(los).fillna(0)
@@ -206,17 +169,6 @@ def build_census_df(
 
     census_df = pd.DataFrame(census_dict)
     census_df["day"] = census_df.index
-<<<<<<< HEAD
-    census_df = census_df[["day", i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated")]]
-    census_df = census_df.head(n_days)
-    census_df = census_df.rename(
-        columns={
-            disposition: f"{disposition}"
-            for disposition in (i18n.t("Hospitalized"), i18n.t("ICU"), i18n.t("Ventilated"))
-        }
-    )
-=======
     census_df = census_df[["day", *lengths_of_stay.keys()]]
     census_df = census_df.head(n_days)
->>>>>>> d9c1f27f013384aa0a4b0f4410b1302129b8e3a0
     return census_df
