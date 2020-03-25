@@ -274,7 +274,7 @@ def show_more_info_about_this_tool(st, model, parameters, defaults, notes: str =
 def write_definitions(st):
     st.subheader(i18n.t("Guidance on Selecting Inputs"))
     st.markdown(
-        i18n.t("**Hospitalized COVID-19 Patients:**...")
+        i18n.t("This information has been moved to...")
     )
 
 
