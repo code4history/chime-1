@@ -3,4 +3,4 @@ pandas
 numpy
 pytest
 altair
-i18n
+python-i18n
