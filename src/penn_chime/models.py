@@ -11,7 +11,6 @@ from typing import Dict, Generator, Tuple
 
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
-import i18n  # type: ignore
 
 from .parameters import Parameters
 
@@ -125,7 +124,7 @@ def sim_sir_df(
     """Simulate the SIR model forward in time."""
     return pd.DataFrame(
         data=gen_sir(s, i, r, beta, gamma, n_days),
-        columns=("day", i18n.t("susceptible"), i18n.t("infected"), i18n.t("recovered")),
+        columns=("day", "susceptible", "infected", "recovered"),
     )
 
 

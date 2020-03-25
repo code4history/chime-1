@@ -5,7 +5,7 @@ Changes affecting results or their presentation should also update
 """
 
 from .utils import RateLos
-
+import i18n # type: ignore
 
 class Parameters:
     """Parameters."""
@@ -46,14 +46,14 @@ class Parameters:
         self.recovery_days = recovery_days
 
         self.labels = {
-            "hospitalized": "Hospitalized",
-            "icu": "ICU",
-            "ventilated": "Ventilated",
-            "day": "Day",
-            "date": "Date",
-            "susceptible": "Susceptible",
-            "infected": "Infected",
-            "recovered": "Recovered",
+            "hospitalized": i18n.t("Hospitalized"),
+            "icu": i18n.t("ICU"),
+            "ventilated": i18n.t("Ventilated"),
+            "day": i18n.t("Day"),
+            "date": i18n.t("Date"),
+            "susceptible": i18n.t("Susceptible"),
+            "infected": i18n.t("Infected"),
+            "recovered": i18n.t("Recovered"),
         }
 
         self.dispositions = {

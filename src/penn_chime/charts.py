@@ -35,7 +35,7 @@ def new_admissions_chart(
     # TODO fix the fold to allow any number of dispositions
     return (
         alt.Chart(projection_admits.head(plot_projection_days))
-        .transform_fold(fold=[i18n.t("hospitalized"), i18n.t("icu"), i18n.t("ventilated")])
+        .transform_fold(fold=["hospitalized", "icu", "ventilated"])
         .mark_line(point=True)
         .encode(
             x=alt.X(**x_kwargs),
@@ -76,7 +76,7 @@ def admitted_patients_chart(
     # TODO fix the fold to allow any number of dispositions
     return (
         alt.Chart(census.head(plot_projection_days))
-        .transform_fold(fold=[i18n.t("hospitalized"), i18n.t("icu"), i18n.t("ventilated")])
+        .transform_fold(fold=["hospitalized", "icu", "ventilated"])
         .mark_line(point=True)
         .encode(
             x=alt.X(**x_kwargs),
@@ -99,8 +99,8 @@ def additional_projections_chart(
     # TODO use subselect of df_raw instead of creating a new df
     raw_df = model.raw_df
     dat = pd.DataFrame({
-        i18n.t("infected"): raw_df.infected,
-        i18n.t("recovered"): raw_df.recovered
+        "infected": raw_df.infected,
+        "recovered": raw_df.recovered
     })
     dat["day"] = dat.index
 
@@ -121,7 +121,7 @@ def additional_projections_chart(
 
     return (
         alt.Chart(dat)
-        .transform_fold(fold=[i18n.t("infected"), i18n.t("recovered")])
+        .transform_fold(fold=["infected", "recovered"])
         .mark_line()
         .encode(
             x=alt.X(**x_kwargs),
@@ -144,7 +144,7 @@ def chart_descriptions(chart: Chart, labels, suffix: str = ""):
     """
     messages = []
 
-    cols = [i18n.t("hospitalized"), i18n.t("icu"), i18n.t("ventilated")]
+    cols = ["hospitalized", "icu", "ventilated"]
     asterisk = False
     day = "date" if "date" in chart.data.columns else "day"
 
