@@ -1,1 +1,2 @@
+python-i18n
 -e .
