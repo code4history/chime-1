@@ -1,8 +1,5 @@
 """effectful functions for streamlit io"""
 
-from typing import Optional
-
-import altair as alt  # type: ignore
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
 import i18n # type: ignore
@@ -13,6 +10,9 @@ from .parameters import Parameters
 
 DATE_FORMAT = "%b, %d"  # see https://strftime.org
 DOCS_URL = "https://code-for-philly.gitbook.io/chime"
+
+FLOAT_INPUT_MIN = 0.001
+FLOAT_INPUT_STEP = FLOAT_INPUT_MIN
 
 hide_menu_style = """
         <style>
@@ -87,7 +87,7 @@ def display_header(st, m, p):
     return None
 
 
-class InputWrapper:
+class Input:
     """Helper to separate Streamlit input definition from creation/rendering"""
     def __init__(self, st_obj, label, value, kwargs):
         self.st_obj = st_obj
@@ -99,13 +99,21 @@ class InputWrapper:
         return self.st_obj(self.label, value=self.value, **self.kwargs)
 
 
-class NumberInputWrapper(InputWrapper):
+class NumberInput(Input):
     def __init__(self, st_obj, label, min_value=None, max_value=None, value=None, step=None, format=None, key=None):
         kwargs = dict(min_value=min_value, max_value=max_value, step=step, format=format, key=key)
         super().__init__(st_obj.number_input, label, value, kwargs)
 
 
-class CheckboxWrapper(InputWrapper):
+class PercentInput(NumberInput):
+    def __init__(self, st_obj, label, min_value=0.0, max_value=100.0, value=None, step=FLOAT_INPUT_STEP, format="%f", key=None):
+        super().__init__(st_obj, label, min_value, max_value, value * 100.0, step, format, key)
+
+    def __call__(self):
+        return super().__call__() / 100.0
+
+
+class CheckboxInput(Input):
     def __init__(self, st_obj, label, value=None, key=None):
         kwargs = dict(key=key)
         super().__init__(st_obj.checkbox, label, value, kwargs)
@@ -120,7 +128,7 @@ def display_sidebar(st, d: Constants) -> Parameters:
     if d.known_infected < 1:
         raise ValueError(i18n.t("Known cases must be larger than one to enable predictions."))
     st_obj = st.sidebar
-    current_hospitalized_input = NumberInputWrapper(
+    current_hospitalized_input = NumberInput(
         st_obj,
         i18n.t("Currently Hospitalized COVID-19 Patients"),
         min_value=0,
@@ -128,59 +136,43 @@ def display_sidebar(st, d: Constants) -> Parameters:
         step=1,
         format="%i",
     )
-    n_days_input = NumberInputWrapper(
+    n_days_input = NumberInput(
         st_obj,
         i18n.t("Number of days to project"),
         min_value=30,
         value=d.n_days,
-        step=10,
-        format="%i",
-    )
-    doubling_time_input = NumberInputWrapper(
-        st_obj,
-        i18n.t("Doubling time before social distancing (days)"),
-        min_value=0,
-        value=d.doubling_time,
         step=1,
         format="%i",
     )
-    relative_contact_rate_input = NumberInputWrapper(
+    doubling_time_input = NumberInput(
+        st_obj,
+        i18n.t("Doubling time before social distancing (days)"),
+        min_value=FLOAT_INPUT_MIN,
+        value=d.doubling_time,
+        step=FLOAT_INPUT_STEP,
+        format="%f",
+    )
+    relative_contact_pct_input = PercentInput(
         st_obj,
         i18n.t("Social distancing (% reduction in social contact)"),
-        min_value=0,
-        max_value=100,
-        value=int(d.relative_contact_rate * 100),
-        step=5,
-        format="%i",
+        value=d.relative_contact_rate,
     )
-    hospitalized_rate_input = NumberInputWrapper(
+    hospitalized_pct_input = PercentInput(
         st_obj,
         i18n.t("Hospitalization %(total infections)"),
-        min_value=0.001,
-        max_value=100.0,
-        value=d.hospitalized.rate * 100,
-        step=1.0,
-        format="%f",
+        value=d.hospitalized.rate,
     )
-    icu_rate_input = NumberInputWrapper(
+    icu_pct_input = PercentInput(
         st_obj,
         i18n.t("ICU %(total infections)"),
-        min_value=0.0,
-        max_value=100.0,
-        value=d.icu.rate * 100,
-        step=1.0,
-        format="%f",
+        value=d.icu.rate,
     )
-    ventilated_rate_input = NumberInputWrapper(
+    ventilated_pct_input = PercentInput(
         st_obj,
         i18n.t("Ventilated %(total infections)"),
-        min_value=0.0,
-        max_value=100.0,
-        value=d.ventilated.rate * 100,
-        step=1.0,
-        format="%f",
+        value=d.ventilated.rate,
     )
-    hospitalized_los_input = NumberInputWrapper(
+    hospitalized_los_input = NumberInput(
         st_obj,
         i18n.t("Hospital Length of Stay"),
         min_value=0,
@@ -188,7 +180,7 @@ def display_sidebar(st, d: Constants) -> Parameters:
         step=1,
         format="%i",
     )
-    icu_los_input = NumberInputWrapper(
+    icu_los_input = NumberInput(
         st_obj,
         i18n.t("ICU Length of Stay"),
         min_value=0,
@@ -196,7 +188,7 @@ def display_sidebar(st, d: Constants) -> Parameters:
         step=1,
         format="%i",
     )
-    ventilated_los_input = NumberInputWrapper(
+    ventilated_los_input = NumberInput(
         st_obj,
         i18n.t("Vent Length of Stay"),
         min_value=0,
@@ -204,52 +196,48 @@ def display_sidebar(st, d: Constants) -> Parameters:
         step=1,
         format="%i",
     )
-    market_share_input = NumberInputWrapper(
+    market_share_pct_input = PercentInput(
         st_obj,
         i18n.t("Hospital Market Share (%)"),
-        min_value=0.001,
-        max_value=100.0,
-        value=d.market_share * 100,
-        step=1.0,
-        format="%f",
+        min_value=FLOAT_INPUT_MIN,
+        value=d.market_share,
     )
-    population_input = NumberInputWrapper(
+    population_input = NumberInput(
         st_obj,
         i18n.t("Regional Population"),
         min_value=1,
         value=d.region.population,
-        step=100000,
+        step=1,
         format="%i",
     )
-    known_infected_input = NumberInputWrapper(
+    known_infected_input = NumberInput(
         st_obj,
         i18n.t("Currently Known Regional Infections (only used to compute detection rate - does not change projections)"),
         min_value=0,
         value=d.known_infected,
-        step=10,
+        step=1,
         format="%i",
     )
-    as_date_input = CheckboxWrapper(st_obj, i18n.t("Present result as dates instead of days"), value=False)
-    max_y_axis_set_input = CheckboxWrapper(st_obj, i18n.t("Set the Y-axis on graphs to a static value"))
-    max_y_axis_input = NumberInputWrapper(st_obj, i18n.t("Y-axis static value"), value=500, format="%i", step=25)
-
+    as_date_input = CheckboxInput(st_obj, i18n.t("Present result as dates instead of days"), value=False)
+    max_y_axis_set_input = CheckboxInput(st_obj, i18n.t("Set the Y-axis on graphs to a static value"))
+    max_y_axis_input = NumberInput(st_obj, i18n.t("Y-axis static value"), value=500, format="%i", step=25)
 
     # Build in desired order
     st.sidebar.markdown(i18n.t("### Regional Parameters [ℹ]({docs_url}/what-is-chime/parameters)").format(docs_url=DOCS_URL))
     population = population_input()
-    market_share = market_share_input()
+    market_share = market_share_pct_input()
     known_infected = known_infected_input()
     current_hospitalized = current_hospitalized_input()
 
     st.sidebar.markdown(i18n.t("### Spread and Contact Parameters [ℹ]({docs_url}/what-is-chime/parameters)")
                         .format(docs_url=DOCS_URL))
     doubling_time = doubling_time_input()
-    relative_contact_rate = relative_contact_rate_input()
+    relative_contact_rate = relative_contact_pct_input()
 
     st.sidebar.markdown(i18n.t("### Severity Parameters [ℹ]({docs_url}/what-is-chime/parameters)").format(docs_url=DOCS_URL))
-    hospitalized_rate = hospitalized_rate_input()
-    icu_rate = icu_rate_input()
-    ventilated_rate = ventilated_rate_input()
+    hospitalized_rate = hospitalized_pct_input()
+    icu_rate = icu_pct_input()
+    ventilated_rate = ventilated_pct_input()
     hospitalized_los = hospitalized_los_input()
     icu_los = icu_los_input()
     ventilated_los = ventilated_los_input()
@@ -272,12 +260,12 @@ def display_sidebar(st, d: Constants) -> Parameters:
 
         max_y_axis=max_y_axis,
         n_days=n_days,
-        relative_contact_rate=relative_contact_rate / 100.0,
+        relative_contact_rate=relative_contact_rate,
         population=population,
 
-        hospitalized=RateLos(hospitalized_rate/ 100.0, hospitalized_los),
-        icu=RateLos(icu_rate/ 100.0, icu_los),
-        ventilated=RateLos(ventilated_rate/ 100.0, ventilated_los),
+        hospitalized=RateLos(hospitalized_rate, hospitalized_los),
+        icu=RateLos(icu_rate, icu_los),
+        ventilated=RateLos(ventilated_rate, ventilated_los),
     )
 
 
