@@ -11,28 +11,39 @@ ja:
   "Vent Length of Stay": "平均人工呼吸器利用日数"
   "Hospital Market Share (%)": "地域での病院の患者シェア (%)"
   "Regional Population": "地域の人口"
-  "Penn Medicine - COVID-19 Hospital Impact Model for Epidemics...": |+
+  "(Warning: The number of known infections is greater than...": "(注意:既知の感染者数が、現在の入院患者数、患者シェア、および入院患者率の入力に基づく推定感染者数よりも多くなっています。サイドバーの患者シェア値を確認し、入院患者率を下げる必要があるかどうかを確認してください。)"
+  "(Warning: The number of estimated infections is greater than...": "(警告:推定感染者数が地域の総人口を上回っています。サイドバーに入力された値を確認してください。)"
+  "COVID-19 Hospital Impact Model for Epidemics...": |+
     <link rel="stylesheet" href="https://www1.pennmedicine.org/styles/shared/penn-medicine-header.css">
 
     <div class="penn-medicine-header__content">
     <a href="https://www.pennmedicine.org" class="penn-medicine-header__logo"
     title="Penn Medicineのホームページへ行く">Penn Medicine</a>
-    <a id="title" class="penn-medicine-header__title">Penn Medicine - COVID-19における伝染病の病院影響モデル</a>
+    <a id="title" class="penn-medicine-header__title">COVID-19における伝染病の病院影響モデル</a>
     </div>
+  "[Documentation](https://code-for-philly.gitbook.io/chime/)...": "[ドキュメント](https://code-for-philly.gitbook.io/chime/) | [Github](https://github.com/CodeForPhilly/chime/) | [Slack](https://codeforphilly.org/chat?channel=covid19-chime-penn)"
   "Admissions and Census calculations were...": "**重要な注意**: 入院患者数と統計患者数の数値は、以前は**割り引いて**計算されていました。{0}より前に生成されたレポートは更新してください。この問題の詳細については、[ここ](https://github.com/CodeForPhilly/chime/labels/models)を参照してください。"
   "This tool was developed by...": |+
-    *このツールはペンシルバニア州立大学の医療部門であるPenn Medicineの、[予測医療チーム](http://predictivehealthcare.pennmedicine.org/)によって開発されました。
-    このツールをどのように使うかについては、[ドキュメントページ](https://code-for-philly.gitbook.io/chime/)を見てください。
-    ソースコードは[Github](https://github.com/CodeForPhilly/chime)で配布されています。
-    開発に参加したい場合は是非我々の[Slackチャンネル](https://codeforphilly.org/chat?channel=covid19-chime-penn)に参加してください！*
+    *このツールはペンシルバニア州立大学の医療部門であるPenn Medicineの、[予測医療チーム](http://predictivehealthcare.pennmedicine.org/)によって、
+    病院や公衆衛生担当者の病院能力計画を支援するために開発されました。
+    世界のあらゆる場所での事例に活用いただけます。
+    ページ左パネルの入力データを変更することによって、利用者の地域に合わせたカスタマイズができます。
+    このツールをどのように使うかについては、[ユーザドキュメント]({docs_url})を見てください。ソースコードは[Github](https://github.com/CodeForPhilly/chime)で配布されています。
   "The estimated number of currently infected...": |+
     現在の予測感染者人数は**{total_infections:.0f}**人です。
     この地域で確認された感染事例は**{initial_infections}**例で、検出率は**{detection_prob_str}**にあたります。
     この結果は入院患者数(**{current_hosp}**)、患者の入院割合(**{hosp_rate:.0%}**)、地域の人口(**{S}**)および病院の地域での患者シェア(**{market_share:.0%}**)を元に計算されています。
 
-    初期倍加時間が**{impact_statement:s} {doubling_time_t:.1f}**日であれば、$R_0$は**{r_naught:.2f}**となります。
+    {infection_warning_str}
+    {infected_population_warning_str}
 
-    **緩和**: アウトブレイク発生後の社会的接触が**{relative_contact_rate:.0%}**減少すると、倍加時間は**{doubling_time_t:.1f}**日に改善され、実効$R_t$は**${r_t:.2f}$**となります。
+    初期倍加時間が**{doubling_time}**日で、回復までの時間が**{recovery_days}**日であれば、$R_0$は**{r_naught:.2f}**となり、
+    日々の増加率は**{daily_growth:.2f}%**となります。
+
+    **緩和**: アウトブレイク発生後の社会的接触が**{relative_contact_rate:.0%}**減少すると、**{impact_statement:s}{doubling_time_t:.1f}**日となり、
+    実効$R_t$は**${r_t:.2f}$**、日々の増加率は**{daily_growth_t:.2f}%**となります。
+  "reduces the doubling time to": "倍加時間は改善されて"
+  "halves the infections every": "感染の半減期は"
   "Show more info about this tool": "さらにこのツールの情報を表示する"
   "Discrete-time SIR modeling": "[Discrete-time SIR modeling](https://mathworld.wolfram.com/SIRModel.html) of infections/recovery"
   "The model consists of individuals who are either...": |+
@@ -119,7 +130,7 @@ ja:
   "Guidance on Selecting Inputs": "選択した値の入力についてのガイダンス"
   "This information has been moved to...": |+
     **この項目に記されていた情報は、
-    [ユーザードキュメント](https://code-for-philly.gitbook.io/chime/what-is-chime/parameters#guidance-on-selecting-inputs)に移動しています。**
+    [ユーザードキュメント]({docs_url}/what-is-chime/parameters#guidance-on-selecting-inputs)に移動しています。**
   "References & Acknowledgements": "参考資料と謝辞"
   "* AHA Webinar, Feb 26, James Lawler, MD, ...": |+
     * AHA Webinar, Feb 26, James Lawler, MD, an associate professor University of Nebraska Medical Center, What Healthcare Leaders Need To Know: Preparing for the COVID-19
@@ -137,3 +148,9 @@ ja:
   "Show Daily Counts": "毎日の患者数を表示"
   "Show Daily Census Counts": "毎日の統計患者数を表示"
   "Download full table as CSV": "全テーブルをCSV形式でダウンロード"
+  "Interval of Days": "間隔日数"
+  "### Regional Parameters [ℹ]({docs_url}/what-is-chime/parameters)": "### 地域パラメータ [ℹ]({docs_url}/what-is-chime/parameters)"
+  "### Spread and Contact Parameters [ℹ]({docs_url}/what-is-chime/parameters)": "### 拡散と接触のパラメータ [ℹ]({docs_url}/what-is-chime/parameters)"
+  "### Severity Parameters [ℹ]({docs_url}/what-is-chime/parameters)": "### 深刻度パラメータ [ℹ]({docs_url}/what-is-chime/parameters)"
+  "### Display Parameters [ℹ]({docs_url}/what-is-chime/parameters)": "### 表示パラメータ [ℹ]({docs_url}/what-is-chime/parameters)"
+
