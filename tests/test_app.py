@@ -82,6 +82,7 @@ st = MockStreamlit()
 def header_test_helper(expected_str, model, param):
     st.cleanup()
     display_header(st, model, param)
+    print(st.render_store)
     assert [s for s in st.render_store if expected_str in s],\
         "Expected the string '{expected}' in the display header".format(expected=expected_str)
     st.cleanup()
