@@ -3,7 +3,7 @@
 from dash import Dash
 from penn_chime.settings import DEFAULTS
 from chime_dash.app.components import Body
-LANGUAGE = "en"
+LANGUAGE = "ja"
 
 
 #ef main():

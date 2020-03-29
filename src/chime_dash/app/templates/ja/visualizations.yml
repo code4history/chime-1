@@ -1,0 +1,11 @@
+new-admissions-title: 新規患者数
+new-admissions-text: Penn Hospitalでの**日毎の**COVID-19関連新規患者数予測
+admitted-patients-title: 入院患者数(統計)
+admitted-patients-text: Penn Hospitalにおける入院と退院を考慮したCOVID-19患者の予測**統計数**
+
+# Chart labels
+day: 日数
+date: 日付
+hosp: 入院患者数
+icu: 集中治療室患者数
+vent: 人工呼吸器患者数

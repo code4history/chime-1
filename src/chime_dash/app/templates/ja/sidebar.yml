@@ -1,0 +1,23 @@
+current_hospitalized: 現在入院中のCOVID-19患者数
+doubling_time: 社会的隔離を行う前の患者倍加時間（日数）
+relative_contact_rate: 社会的隔離（社会的接触の減少割合 %）
+hospitalized_rate: 入院患者数 %（総感染者数中）
+icu_rate: 集中治療室患者数 %（総感染者数中）
+ventilated_rate: 人工呼吸器患者数 %（総感染者数中）
+hospitalized_los: 平均入院日数
+icu_los: 平均集中治療室利用日数
+ventilated_los: 平均人工呼吸器利用日数
+market_share: 地域での病院の患者シェア（%）
+susceptible: 地域の人口
+known_infected: 現在知られている地域の感染人数（検出率産出のみに用いられ、予測に影響しません）
+n_days: 予測する日数
+as_date: 結果を日付で表示
+max_y_axis: グラフのY軸最大値を固定値にする
+max_y_axis_value: Y軸固定値（指定しない場合は空欄に）
+show_tables: データを表形式で表示
+show_tool_details: このツールについての追加情報を表示
+show_additional_projections: 追加の予測結果を表示
+regional_parameters: 地域パラメータ
+spread_and_contact: 拡散と接触のパラメータ
+severity_parameters: 深刻度パラメータ
+display_parameters: 表示パラメータ
