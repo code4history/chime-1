@@ -8,7 +8,7 @@ COPY setup.py .
 # todo fix once the Pipfile, setup.py, requirements.txt, pyprojec.toml build/dist story is figured out
 RUN mkdir src && mkdir locales && pip install -q .
 COPY .streamlit .streamlit
-COPY settings.cfg .
+# COPY settings.cfg .
 COPY src src
 COPY locales locales
 
