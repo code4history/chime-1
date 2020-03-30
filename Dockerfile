@@ -4,11 +4,13 @@ WORKDIR /app
 COPY README.md .
 COPY requirements.txt .
 COPY setup.py .
+COPY setup.sh .
 # Creating an empty src dir is a (hopefully) temporary hack to improve layer caching and speed up image builds
 # todo fix once the Pipfile, setup.py, requirements.txt, pyprojec.toml build/dist story is figured out
 RUN mkdir src && mkdir locales && pip install -q .
-COPY .streamlit .streamlit
+# COPY .streamlit .streamlit
 # COPY settings.cfg .
+CMD ["./setup.sh"]
 COPY src src
 COPY locales locales
 
