@@ -10,7 +10,6 @@ COPY setup.sh .
 RUN mkdir src && mkdir locales && pip install -q .
 # COPY .streamlit .streamlit
 # COPY settings.cfg .
-CMD ["./setup.sh"]
 COPY src src
 COPY locales locales
 
