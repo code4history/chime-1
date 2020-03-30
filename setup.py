@@ -47,7 +47,8 @@ setup(
         "dash", 
         "dash_bootstrap_components", 
         "pyyaml", 
-        "gunicorn"
+        "gunicorn",
+        "python-i18n"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
