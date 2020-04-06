@@ -13,7 +13,7 @@ class Base:
 
     root = str(_entrypoint.parent)
     debug = False
-    LANG = "en"
+    LANG = "ja"
     CHIME_TITLE = "Penn Medicine CHIME"
 
 
