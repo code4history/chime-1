@@ -4,8 +4,8 @@ Changes affecting results or their presentation should also update
 constants.py `change_date``.
 """
 
-import i18n
 from __future__ import annotations
+import i18n
 
 from argparse import ArgumentParser
 from collections import namedtuple
