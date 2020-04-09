@@ -39,41 +39,24 @@ hide_menu_style = """
 def display_header(st, m, p):
 
     infected_population_warning_str = (
-        i18n.t("(Warning: The number of estimated infections is greater than...")
+        i18n.t("presentation-infected-population-warning")
         if m.infected > p.population
         else ""
     )
 
     st.markdown(
-        i18n.t("COVID-19 Hospital Impact Model for Epidemics..."),
+        i18n.t("presentation-header"),
         unsafe_allow_html=True,
     )
     st.markdown(
-        """**Notice**: *There is a high
-degree of uncertainty about the details of COVID-19 infection, transmission, and the effectiveness of social distancing
-measures. Long-term projections made using this simplified model of outbreak progression should be treated with extreme caution.*
-    """
+        i18n.t("presentation-notice")
     )
     st.markdown(
-        """
-This tool was developed by [Predictive Healthcare](http://predictivehealthcare.pennmedicine.org/) at
-Penn Medicine to assist hospitals and public health officials with hospital capacity planning.
-Please read [How to Use CHIME]({docs_url}) to customize inputs for your region.""".format(docs_url=DOCS_URL))
+        i18n.t("presentation-developed-by").format(docs_url=DOCS_URL))
 
     st.markdown(
-        """The estimated number of currently infected individuals is **{total_infections:.0f}**. This is based on current inputs for
-    Hospitalizations (**{current_hosp}**), Hospitalization rate (**{hosp_rate:.0%}**), Regional population (**{S}**),
-    and Hospital market share (**{market_share:.0%}**).
-
-{infected_population_warning_str}
-
-An initial doubling time of **{doubling_time}** days and a recovery time of **{recovery_days}** days imply an $R_0$ of
- **{r_naught:.2f}** and daily growth rate of **{daily_growth:.2f}%**.
-
-**Mitigation**: A **{relative_contact_rate:.0%}** reduction in social contact after the onset of the
-outbreak **{impact_statement:s} {doubling_time_t:.1f}** days, implying an effective $R_t$ of **${r_t:.2f}$**
-and daily growth rate of **{daily_growth_t:.2f}%**.
-""".format(
+        i18n.t("presentation-estimated-number-of-infection")
+        .format(
             total_infections=m.infected,
             current_hosp=p.current_hospitalized,
             hosp_rate=p.hospitalized.rate,
@@ -82,17 +65,18 @@ and daily growth rate of **{daily_growth_t:.2f}%**.
             recovery_days=p.infectious_days,
             r_naught=m.r_naught,
             doubling_time=p.doubling_time,
-            relative_contact_rate=p.relative_contact_rate,
-            r_t=m.r_t,
-            doubling_time_t=abs(m.doubling_time_t),
-            impact_statement=(
-                "halves the infections every"
-                if m.r_t < 1
-                else "reduces the doubling time to"
-            ),
             daily_growth=m.daily_growth_rate * 100.0,
-            daily_growth_t=m.daily_growth_rate_t * 100.0,
             infected_population_warning_str=infected_population_warning_str,
+            mitigation_str=(
+                i18n.t("presentation-mitigation-rt-less-then-1")
+                if m.r_t < 1
+                else i18n.t("presentation-mitigation-rt-more-then-equal-1")
+            ).format(
+                relative_contact_rate=p.relative_contact_rate,
+                doubling_time_t=abs(m.doubling_time_t),
+                r_t=m.r_t,
+                daily_growth_t=m.daily_growth_rate_t * 100.0,
+            ),
         )
     )
 

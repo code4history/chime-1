@@ -27,7 +27,7 @@ def build_admits_chart(
     # TODO fix the fold to allow any number of dispositions
     points = (
         alt.Chart()
-        .transform_fold(fold=["admits_hospitalized", "admits_icu", "admits_ventilated"])
+        .transform_fold(fold=[i18n.t("admits_hospitalized"), i18n.t("admits_icu"), i18n.t("admits_ventilated")])
         .encode(x=alt.X(**x), y=alt.Y(**y), color=color, tooltip=tooltip)
         .mark_line(point=True)
         .encode(
@@ -43,8 +43,13 @@ def build_admits_chart(
         .transform_filter(alt.datum.day == 0)
         .mark_rule(color="black", opacity=0.35, size=2)
     )
+    admits_floor_df_renamed = admits_floor_df.rename({
+        "admits_hospitalized": i18n.t("admits_hospitalized"),
+        "admits_icu": i18n.t("admits_icu"),
+        "admits_ventilated": i18n.t("admits_ventilated")
+    }, axis=1)
     return (
-        alt.layer(points, bar, data=admits_floor_df)
+        alt.layer(points, bar, data=admits_floor_df_renamed)
         .configure_legend(orient="bottom")
         .interactive()
     )
@@ -66,7 +71,7 @@ def build_census_chart(
     # TODO fix the fold to allow any number of dispositions
     points = (
         alt.Chart()
-        .transform_fold(fold=["census_hospitalized", "census_icu", "census_ventilated"])
+        .transform_fold(fold=[i18n.t("census_hospitalized"), i18n.t("census_icu"), i18n.t("census_ventilated")])
         .encode(x=alt.X(**x), y=alt.Y(**y), color=color, tooltip=tooltip)
         .mark_line(point=True)
         .encode(
@@ -82,8 +87,13 @@ def build_census_chart(
         .transform_filter(alt.datum.day == 0)
         .mark_rule(color="black", opacity=0.35, size=2)
     )
+    census_floor_df_renamed = census_floor_df.rename({
+        "census_hospitalized": i18n.t("census_hospitalized"),
+        "census_icu": i18n.t("census_icu"),
+        "census_ventilated": i18n.t("census_ventilated")
+    }, axis=1)
     return (
-        alt.layer(points, bar, data=census_floor_df)
+        alt.layer(points, bar, data=census_floor_df_renamed)
         .configure_legend(orient="bottom")
         .interactive()
     )
@@ -105,7 +115,7 @@ def build_sim_sir_w_date_chart(
     # TODO fix the fold to allow any number of dispositions
     points = (
         alt.Chart()
-        .transform_fold(fold=["susceptible", "infected", "recovered"])
+        .transform_fold(fold=[i18n.t("susceptible"), i18n.t("infected"), i18n.t("recovered")])
         .encode(x=alt.X(**x), y=alt.Y(**y), color=color, tooltip=tooltip)
         .mark_line()
         .encode(
@@ -121,8 +131,13 @@ def build_sim_sir_w_date_chart(
         .transform_filter(alt.datum.day == 0)
         .mark_rule(color="black", opacity=0.35, size=2)
     )
+    sim_sir_w_date_floor_df_renamed = sim_sir_w_date_floor_df.rename({
+        "susceptible": i18n.t("susceptible"),
+        "infected": i18n.t("infected"),
+        "recovered": i18n.t("recovered")
+    }, axis=1)
     return (
-        alt.layer(points, bar, data=sim_sir_w_date_floor_df)
+        alt.layer(points, bar, data=sim_sir_w_date_floor_df_renamed)
         .configure_legend(orient="bottom")
         .interactive()
     )
@@ -150,17 +165,17 @@ def build_descriptions(
     day = "date" if "date" in chart.data.columns else "day"
 
     for col in cols:
-        if chart.data[prefix+col].idxmax() + 1 == len(chart.data):
+        if chart.data[i18n.t(prefix+col)].idxmax() + 1 == len(chart.data):
             asterisk = True
 
         # todo: bring this to an optional arg / i18n
-        on = datetime.strftime(chart.data[day][chart.data[prefix+col].idxmax()], "%b %d")
+        on = datetime.strftime(chart.data[day][chart.data[i18n.t(prefix+col)].idxmax()], "%b %d")
 
         messages.append(
             i18n.t("charts-peak-template").format(
                 labels[col],
                 suffix,
-                ceil(chart.data[prefix+col].max()),
+                ceil(chart.data[i18n.t(prefix+col)].max()),
                 on,
                 "*" if asterisk else "",
             )

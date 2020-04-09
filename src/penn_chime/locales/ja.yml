@@ -16,6 +16,48 @@ ja:
   charts-count: "人数"
   charts-peak-template: "{0}{1}のピークは{2:,}人で、{3}に現れます。{4}"
   charts-max-upper-bound: "_* 最大値はデータの上限であるため、実際の最大値ではない場合があります_"
+  presentation-infected-population-warning: "(警告:推定感染者数が地域の人口を上回っています。サイドバーに入力された値を確認してください。)"
+  presentation-header: |+
+    <link rel="stylesheet" href="https://www1.pennmedicine.org/styles/shared/penn-medicine-header.css">
+
+    <div class="penn-medicine-header__content">
+    <a href="https://www.pennmedicine.org" class="penn-medicine-header__logo"
+    title="Penn Medicineのホームページへ行く">Penn Medicine</a>
+    <a id="title" class="penn-medicine-header__title">COVID-19における伝染病の病院影響モデル</a>
+    </div>
+  presentation-notice: |+
+    **重要**: COVID-19の感染、伝播、
+    社会的遠距離戦略の厳密な有効性については、まだ多くの不確実な点があります。
+    この簡略化されたアウトブレイク進行モデルを用いた長期予測は、細心の注意を払って取り扱ってください。
+  presentation-developed-by: |+
+    このツールはペンシルバニア州立大学の医療部門であるPenn Medicineの、[予測医療チーム](http://predictivehealthcare.pennmedicine.org/)によって、
+    病院や公衆衛生担当者の収容能力把握を支援するために開発されました。
+    地域の状況に応じたデータにカスタマイズするには、「[CHIMEの使い方]({docs_url})」をご覧ください。
+  presentation-estimated-number-of-infection: |+
+    現在の予測感染者人数は**{total_infections:.0f}**人です。
+    この結果は入院患者数(**{current_hosp}**)、患者の入院割合(**{hosp_rate:.0%}**)、地域の人口(**{S}**)および病院の患者シェア(**{market_share:.0%}**)を元に計算されています。
+
+    {infected_population_warning_str}
+
+    初期倍加時間が**{doubling_time}**日で、回復までの時間が**{recovery_days}**日であれば、$R_0$は**{r_naught:.2f}**となり、
+    日々の増加率は**{daily_growth:.2f}%**となります。
+
+    {mitigation_str}
+  presentation-mitigation-rt-less-then-1: |+
+    **緩和**: アウトブレイク発生後の社会的接触が**{relative_contact_rate:.0%}**減少すると、**感染の半減期は{doubling_time_t:.1f}**日となり、
+    実効$R_t$は**${r_t:.2f}$**、日々の増加率は**{daily_growth_t:.2f}%**となります。
+  presentation-mitigation-rt-more-then-equal-1: |+
+    **緩和**: アウトブレイク発生後の社会的接触が**{relative_contact_rate:.0%}**減少すると、**倍加時間は改善されて{doubling_time_t:.1f}**日となり、
+    実効$R_t$は**${r_t:.2f}$**、日々の増加率は**{daily_growth_t:.2f}%**となります。
+  admits_hospitalized: "新規入院患者数"
+  admits_icu: "新規集中治療患者数"
+  admits_ventilated: "新規人工呼吸患者数"
+  census_hospitalized: "累計入院患者数"
+  census_icu: "累計集中治療患者数"
+  census_ventilated: "累計人工呼吸患者数"
+  susceptible: "感受性保持者数"
+  infected: "感染者数"
+  recovered: "回復者数"
   "Currently Known Regional Infections (only used to compute detection rate - does not change projections)": "現在知られている地域の感染人数 (検出率産出のみに用いられ、予測に影響しません)"
   "Currently Hospitalized COVID-19 Patients": "現在入院中のCOVID-19患者数"
   "Doubling time before social distancing (days)": "社会的隔離を行う前の患者倍加時間 (日数)"
@@ -29,23 +71,8 @@ ja:
   "Hospital Market Share (%)": "地域での病院の患者シェア (%)"
   "Regional Population": "地域の人口"
   "(Warning: The number of known infections is greater than...": "(注意:既知の感染者数が、現在の入院患者数、患者シェア、および入院患者率の入力に基づく推定感染者数よりも多くなっています。サイドバーの患者シェア値を確認し、入院患者率を下げる必要があるかどうかを確認してください。)"
-  "(Warning: The number of estimated infections is greater than...": "(警告:推定感染者数が地域の総人口を上回っています。サイドバーに入力された値を確認してください。)"
-  "COVID-19 Hospital Impact Model for Epidemics...": |+
-    <link rel="stylesheet" href="https://www1.pennmedicine.org/styles/shared/penn-medicine-header.css">
-
-    <div class="penn-medicine-header__content">
-    <a href="https://www.pennmedicine.org" class="penn-medicine-header__logo"
-    title="Penn Medicineのホームページへ行く">Penn Medicine</a>
-    <a id="title" class="penn-medicine-header__title">COVID-19における伝染病の病院影響モデル</a>
-    </div>
   "[Documentation](https://code-for-philly.gitbook.io/chime/)...": "[ドキュメント](https://code-for-philly.gitbook.io/chime/) | [Github](https://github.com/CodeForPhilly/chime/) | [Slack](https://codeforphilly.org/chat?channel=covid19-chime-penn)"
   "Admissions and Census calculations were...": "**重要な注意**: 入院患者数と統計患者数の数値は、以前は**割り引いて**計算されていました。{0}より前に生成されたレポートは更新してください。この問題の詳細については、[ここ](https://github.com/CodeForPhilly/chime/labels/models)を参照してください。"
-  "This tool was developed by...": |+
-    *このツールはペンシルバニア州立大学の医療部門であるPenn Medicineの、[予測医療チーム](http://predictivehealthcare.pennmedicine.org/)によって、
-    病院や公衆衛生担当者の病院能力計画を支援するために開発されました。
-    世界のあらゆる場所での事例に活用いただけます。
-    ページ左パネルの入力データを変更することによって、利用者の地域に合わせたカスタマイズができます。
-    このツールをどのように使うかについては、[ユーザドキュメント]({docs_url})を見てください。ソースコードは[Github](https://github.com/CodeForPhilly/chime)で配布されています。
   "The estimated number of currently infected...": |+
     現在の予測感染者人数は**{total_infections:.0f}**人です。
     この地域で確認された感染事例は**{initial_infections}**例で、検出率は**{detection_prob_str}**にあたります。

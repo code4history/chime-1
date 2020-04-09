@@ -27,7 +27,7 @@ from penn_chime.charts import (
 i18n.set('filename_format', '{locale}.{format}')
 i18n.set('locale', 'ja')
 i18n.set('fallback', 'en')
-i18n.load_path.append(os.path.dirname(__file__) + '/../locales')
+i18n.load_path.append(os.path.dirname(__file__) + '/penn_chime/locales')
 
 # This is somewhat dangerous:
 # Hide the main menu with "Rerun", "run on Save", "clear cache", and "record a screencast"
