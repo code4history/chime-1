@@ -142,50 +142,6 @@ def build_sim_sir_w_date_chart(
         .interactive()
     )
 
-
-def build_descriptions(
-    *,
-    chart: Chart,
-    labels: Dict[str, str],
-    prefix: str = ""
-) -> str:
-    """
-
-    :param chart: The alt chart to be used in finding max points
-    :param suffix: The assumption is that the charts have similar column names.
-                   The census chart adds " Census" to the column names.
-                   Make sure to include a space or underscore as appropriate
-    :return: Returns a multi-line string description of the results
-    """
-    messages = []
-
-    cols = ["hospitalized", "icu", "ventilated"]
-    asterisk = False
-    day = "date" if "date" in chart.data.columns else "day"
-
-    for col in cols:
-        if chart.data[i18n.t(prefix+col)].idxmax() + 1 == len(chart.data):
-            asterisk = True
-
-        # todo: bring this to an optional arg / i18n
-        on = datetime.strftime(chart.data[day][chart.data[i18n.t(prefix+col)].idxmax()], "%b %d")
-
-        messages.append(
-            i18n.t("charts-peak-template").format(
-                target_patients=labels[prefix+col],
-                peak_number=ceil(chart.data[i18n.t(prefix+col)].max()),
-                on=on,
-                asterisk="*" if asterisk else "",
-            )
-        )
-
-    if asterisk:
-        messages.append(
-            i18n.t("charts-max-upper-bound")
-        )
-    return "\n\n".join(messages)
-
-
 def build_table(
     *, df: pd.DataFrame, labels: Dict[str, str], modulo: int = 1
 ) -> pd.DataFrame:

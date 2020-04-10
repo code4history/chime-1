@@ -1,21 +1,14 @@
 ja:
   app-new-admissions-title: "新規患者数"
-  app-new-admissions-text: "**日毎の**COVID-19関連新規患者数予測 \n\n _注: 比較のために過去の新規患者数の推定値を含めています。_"
-  app-show-new-tabular-form: "予測された新規患者数を表形式で見る"
-  app-show-daily-new-counts: "毎日の患者数を表示"
+  app-new-admissions-text: "**日毎の**COVID-19関連新規患者数予測"
   app-admitted-patients-title: "入院患者数(累計)"
-  app-admitted-patients-text: "入院と退院を考慮したCOVID-19患者の予測**累計数** \n\n _注: 比較のために過去の入院患者数の推定値を含めています。_"
-  app-show-census-tabular-form: "予測された累計患者数を表形式で見る"
-  app-show-daily-census-counts: "毎日の累計患者数を表示"
+  app-admitted-patients-text: "入院と退院を考慮したCOVID-19患者の予測**累計数**"
   app-SIR-title: "感受性保持者、感染者と回復者"
   app-SIR-text: "与えられた時間範囲での、病院の担当範囲領域における感受性保持者、感染者と回復者の人数"
-  app-show-sir-tabular-form: "SIRシミュレーションを表形式で見る"
   charts-date: "日付"
   charts-daily-admissions: "毎日の新規患者数"
   charts-census: "累計患者数"
   charts-count: "人数"
-  charts-peak-template: "{target_patients}のピークは{peak_number:,}人で、{on}に現れます{asterisk}"
-  charts-max-upper-bound: "_* 最大値はデータの上限であるため、実際の最大値ではない場合があります_"
   presentation-infected-population-warning: "(警告:推定感染者数が地域の人口を上回っています。サイドバーに入力された値を確認してください。)"
   presentation-header: |+
     <link rel="stylesheet" href="https://www1.pennmedicine.org/styles/shared/penn-medicine-header.css">

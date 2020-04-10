@@ -1,21 +1,14 @@
 en:
   app-new-admissions-title: "New Admissions"
-  app-new-admissions-text: "Projected number of **daily** COVID-19 admissions. \n\n _NOTE: Now including estimates of prior admissions for comparison._"
-  app-show-new-tabular-form: "Show Projected Admissions in tabular form"
-  app-show-daily-new-counts: "Show Daily Counts"
+  app-new-admissions-text: "Projected number of **daily** COVID-19 admissions."
   app-admitted-patients-title: "Admitted Patients (Census)"
-  app-admitted-patients-text: "Projected **census** of COVID-19 patients, accounting for arrivals and discharges \n\n _NOTE: Now including estimates of prior census for comparison._"
-  app-show-census-tabular-form: "Show Projected Census in tabular form"
-  app-show-daily-census-counts: "Show Daily Census Counts"
+  app-admitted-patients-text: "Projected **census** of COVID-19 patients, accounting for arrivals and discharges."
   app-SIR-title: "Susceptible, Infected, and Recovered"
   app-SIR-text: "The number of susceptible, infected, and recovered individuals in the hospital catchment region at any given moment"
-  app-show-sir-tabular-form: "Show SIR Simulation in tabular form"
   charts-date: "Date"
   charts-daily-admissions: "Daily admissions"
   charts-census: "Census"
   charts-count: "Count"
-  charts-peak-template: "{target_patients} peaks at {peak_number:,} on {on}{asterisk}"
-  charts-max-upper-bound: "_* The max is at the upper bound of the data, and therefore may not be the actual max_"
   presentation-infected-population-warning: "(Warning: The number of estimated infections is greater than the total regional population. Please verify the values entered in the sidebar.)"
   presentation-header: |+
     <link rel="stylesheet" href="https://www1.pennmedicine.org/styles/shared/penn-medicine-header.css">
