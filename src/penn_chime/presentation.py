@@ -157,7 +157,7 @@ def display_sidebar(st, d: Parameters) -> Parameters:
 
     current_hospitalized_input = NumberInput(
         st_obj,
-        "Currently hospitalized COVID-19 patients",
+        i18n.t("presentation-current-hospitalized"),
         min_value=0,
         value=d.current_hospitalized,
         step=1,
@@ -165,7 +165,7 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     )
     n_days_input = NumberInput(
         st_obj,
-        i18n.t("Number of days to project"),
+        i18n.t("presentation-n-days"),
         min_value=30,
         value=d.n_days,
         step=1,
@@ -173,26 +173,26 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     )
     doubling_time_input = NumberInput(
         st_obj,
-        "Doubling time in days (up to today)",
+        i18n.t("presentation-doubling-time"),
         min_value=0.5,
         value=d.doubling_time,
         step=0.25,
         format="%f",
     )
     current_date_input = DateInput(
-        st_obj, "Current date (default is today)", value=d.current_date,
+        st_obj, i18n.t("presentation-current-date"), value=d.current_date,
     )
     date_first_hospitalized_input = DateInput(
-        st_obj, "Date of first hospitalized case (enter this date to have CHIME estimate the initial doubling time)",
+        st_obj, i18n.t("presentation-date-first-hospitalized"),
         value=d.date_first_hospitalized,
     )
     mitigation_date_input = DateInput(
-        st_obj, "Date of social distancing measures effect (may be delayed from implementation)",
+        st_obj, i18n.t("presentation-mitigation-date"),
         value=d.mitigation_date
     )
     relative_contact_pct_input = PercentInput(
         st_obj,
-        "Social distancing (% reduction in social contact going forward)",
+        i18n.t("presentation-relative-contact-rate"),
         min_value=0.0,
         max_value=100.0,
         value=d.relative_contact_rate,
@@ -200,23 +200,23 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     )
     hospitalized_pct_input = PercentInput(
         st_obj,
-        "Hospitalization %(total infections)",
+        i18n.t("presentation-hospitalized-rate"),
         value=d.hospitalized.rate,
         min_value=FLOAT_INPUT_MIN,
         max_value=100.0
     )
     icu_pct_input = PercentInput(st_obj,
-        "ICU %(total infections)",
+        i18n.t("presentation-icu-rate"),
         min_value=0.0,
         value=d.icu.rate,
         step=0.05
     )
     ventilated_pct_input = PercentInput(
-        st_obj, "Ventilated %(total infections)", value=d.ventilated.rate,
+        st_obj, i18n.t("presentation-ventilated-rate"), value=d.ventilated.rate,
     )
     hospitalized_days_input = NumberInput(
         st_obj,
-        "Average hospital length of stay (in days)",
+        i18n.t("presentation-hospitalized-days"),
         min_value=1,
         value=d.hospitalized.days,
         step=1,
@@ -224,7 +224,7 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     )
     icu_days_input = NumberInput(
         st_obj,
-        "Average days in ICU",
+        i18n.t("presentation-icu-days"),
         min_value=1,
         value=d.icu.days,
         step=1,
@@ -232,7 +232,7 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     )
     ventilated_days_input = NumberInput(
         st_obj,
-        "Average days on ventilator",
+        i18n.t("presentation-ventilated-days"),
         min_value=1,
         value=d.ventilated.days,
         step=1,
@@ -240,13 +240,13 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     )
     market_share_pct_input = PercentInput(
         st_obj,
-        "Hospital market share (%)",
+        i18n.t("presentation-market-share"),
         min_value=0.5,
         value=d.market_share,
     )
     population_input = NumberInput(
         st_obj,
-        "Regional population",
+        i18n.t("presentation-population"),
         min_value=1,
         value=(d.population),
         step=1,
@@ -254,17 +254,17 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     )
     infectious_days_input = NumberInput(
         st_obj,
-        "Infectious days",
+        i18n.t("presentation-infectious-days"),
         min_value=1,
         value=d.infectious_days,
         step=1,
         format="%i",
     )
     max_y_axis_set_input = CheckboxInput(
-        st_obj, "Set the Y-axis on graphs to a static value"
+        st_obj, i18n.t("presentation-max-y-axis-set")
     )
     max_y_axis_input = NumberInput(
-        st_obj, "Y-axis static value", value=500, format="%i", step=25
+        st_obj, i18n.t("presentation-max-y-axis"), value=500, format="%i", step=25
     )
 
     # Build in desired order
@@ -276,8 +276,9 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     )
 
     st.sidebar.markdown(
-        "### Hospital Parameters [ℹ]({docs_url}/what-is-chime/parameters#hospital-parameters)".format(
-            docs_url=DOCS_URL
+        "### {hospital_parameters} [ℹ]({docs_url}/what-is-chime/parameters#hospital-parameters)".format(
+            docs_url=DOCS_URL,
+            hospital_parameters=i18n.t("presentation-hospital-parameters")
         )
     )
     population = population_input()
@@ -286,13 +287,14 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     current_hospitalized = current_hospitalized_input()
 
     st.sidebar.markdown(
-        "### Spread and Contact Parameters [ℹ]({docs_url}/what-is-chime/parameters#spread-and-contact-parameters)".format(
-            docs_url=DOCS_URL
+        "### {spread_and_contact_parameters} [ℹ]({docs_url}/what-is-chime/parameters#spread-and-contact-parameters)".format(
+            docs_url=DOCS_URL,
+            spread_and_contact_parameters=i18n.t("presentation-spread-and-contact-parameters")
         )
     )
 
     if st.sidebar.checkbox(
-        "I know the date of the first hospitalized case."
+        i18n.t("presentation-first-hospitalized-check")
     ):
         date_first_hospitalized = date_first_hospitalized_input()
         doubling_time = None
@@ -301,7 +303,7 @@ def display_sidebar(st, d: Parameters) -> Parameters:
         date_first_hospitalized = None
 
     if st.sidebar.checkbox(
-        "Social distancing measures have been implemented",
+        i18n.t("presentation-social-distancing-implemented"),
         value=(d.relative_contact_rate > EPSILON)
     ):
         mitigation_date = mitigation_date_input()
@@ -311,8 +313,9 @@ def display_sidebar(st, d: Parameters) -> Parameters:
         relative_contact_rate = EPSILON
 
     st.sidebar.markdown(
-        "### Severity Parameters [ℹ]({docs_url}/what-is-chime/parameters#severity-parameters)".format(
-            docs_url=DOCS_URL
+        "### {severity_parameters} [ℹ]({docs_url}/what-is-chime/parameters#severity-parameters)".format(
+            docs_url=DOCS_URL,
+            severity_parameters=i18n.t("presentation-severity-parameters")
         )
     )
     hospitalized_rate = hospitalized_pct_input()
@@ -324,8 +327,9 @@ def display_sidebar(st, d: Parameters) -> Parameters:
     ventilated_days = ventilated_days_input()
 
     st.sidebar.markdown(
-        "### Display Parameters [ℹ]({docs_url}/what-is-chime/parameters#display-parameters)".format(
-            docs_url=DOCS_URL
+        "### {display_parameters} [ℹ]({docs_url}/what-is-chime/parameters#display-parameters)".format(
+            docs_url=DOCS_URL,
+            display_parameters=i18n.t("presentation-display-parameters")
         )
     )
     n_days = n_days_input()
@@ -410,11 +414,11 @@ def readGoogleApiSecretsDict():
     return secret
 
 def subscribe(st_obj):
-    st_obj.subheader ("Subscribe")
-    email = st_obj.text_input (label="Enter Email", value="", key="na_lower_1")
-    name = st_obj.text_input (label="Enter Name", value="", key="na_upper_1")
-    affiliation = st_obj.text_input (label="Enter Affiliation", value="", key="na_upper_2")
-    if st_obj.button (label="Submit", key="ta_submit_1"):
+    st_obj.subheader (i18n.t("presentation-subscribe"))
+    email = st_obj.text_input (label=i18n.t("presentation-enter-email"), value="", key="na_lower_1")
+    name = st_obj.text_input (label=i18n.t("presentation-enter-name"), value="", key="na_upper_1")
+    affiliation = st_obj.text_input (label=i18n.t("presentation-enter-affiliation"), value="", key="na_upper_2")
+    if st_obj.button (label=i18n.t("presentation-submit"), key="ta_submit_1"):
         row = [email, name, affiliation]
         send_subscription_to_google_sheet(st_obj, row)
 
@@ -425,22 +429,17 @@ def send_subscription_to_google_sheet(st_obj, row):
     spr.writeToSheet("CHIME Form Submissions", row)
 
 def display_footer(st):
-    st.subheader("References & Acknowledgements")
+    st.subheader(i18n.t("presentation-references-acknowledgements"))
     st.markdown(
-        """* AHA Webinar, Feb 26, James Lawler, MD, an associate professor University of Nebraska Medical Center, What Healthcare Leaders Need To Know: Preparing for the COVID-19
-* We would like to recognize the valuable assistance in consultation and review of model assumptions by Michael Z. Levy, PhD, Associate Professor of Epidemiology, Department of Biostatistics, Epidemiology and Informatics at the Perelman School of Medicine
-* Finally we'd like to thank [Code for Philly](https://codeforphilly.org/) and the many members of the open-source community that [contributed](https://github.com/CodeForPhilly/chime/graphs/contributors) to this project.
-    """
+        i18n.t("presentation-references-acknowledgements-text")
     )
-    st.markdown(i18n.t("© 2020, The Trustees of the University of Pennsylvania"))
+    st.markdown(i18n.t("presentation-copyright"))
 
 
-def display_download_link(st, filename: str, df: pd.DataFrame):
-    csv = dataframe_to_base64(df)
+def display_download_link(st, p, filename: str, df: pd.DataFrame):
+    csv = dataframe_to_base64(df.rename(p.labels, axis=1))
     st.markdown(
-        """
-        <a download="{filename}" href="data:file/csv;base64,{csv}">Download {filename}</a>
-""".format(
+        i18n.t("presentation-download").format(
             csv=csv, filename=filename
         ),
         unsafe_allow_html=True,

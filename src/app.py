@@ -7,6 +7,11 @@ import streamlit as st  # type: ignore
 import i18n  # type: ignore
 import os # type: ignore
 
+i18n.set('filename_format', '{locale}.{format}')
+i18n.set('locale', 'ja')
+i18n.set('fallback', 'en')
+i18n.load_path.append(os.path.dirname(__file__) + '/penn_chime/locales')
+
 from penn_chime.parameters import Parameters
 from penn_chime.presentation import (
     display_download_link,
@@ -24,11 +29,6 @@ from penn_chime.charts import (
     build_table,
 )
 
-i18n.set('filename_format', '{locale}.{format}')
-i18n.set('locale', 'ja')
-i18n.set('fallback', 'en')
-i18n.load_path.append(os.path.dirname(__file__) + '/penn_chime/locales')
-
 # This is somewhat dangerous:
 # Hide the main menu with "Rerun", "run on Save", "clear cache", and "record a screencast"
 # This should not be hidden in prod, but removed
@@ -45,9 +45,10 @@ st.subheader(i18n.t("app-new-admissions-title"))
 st.markdown(i18n.t("app-new-admissions-text"))
 admits_chart = build_admits_chart(alt=alt, admits_floor_df=m.admits_floor_df, max_y_axis=p.max_y_axis)
 st.altair_chart(admits_chart, use_container_width=True)
-st.markdown(build_descriptions(chart=admits_chart, labels=p.labels, prefix="admits_", suffix=" Admissions"))
+st.markdown(build_descriptions(chart=admits_chart, labels=p.labels, prefix="admits_"))
 display_download_link(
     st,
+    p,
     filename=f"{p.current_date}_projected_admits.csv",
     df=m.admits_df,
 )
@@ -67,9 +68,10 @@ st.subheader(i18n.t("app-admitted-patients-title"))
 st.markdown(i18n.t("app-admitted-patients-text"))
 census_chart = build_census_chart(alt=alt, census_floor_df=m.census_floor_df, max_y_axis=p.max_y_axis)
 st.altair_chart(census_chart, use_container_width=True)
-st.markdown(build_descriptions(chart=census_chart, labels=p.labels, prefix="census_", suffix=" Census"))
+st.markdown(build_descriptions(chart=census_chart, labels=p.labels, prefix="census_"))
 display_download_link(
     st,
+    p,
     filename=f"{p.current_date}_projected_census.csv",
     df=m.census_df,
 )
@@ -91,6 +93,7 @@ sim_sir_w_date_chart = build_sim_sir_w_date_chart(alt=alt, sim_sir_w_date_floor_
 st.altair_chart(sim_sir_w_date_chart, use_container_width=True)
 display_download_link(
     st,
+    p,
     filename=f"{p.current_date}_sim_sir_w_date.csv",
     df=m.sim_sir_w_date_df,
 )

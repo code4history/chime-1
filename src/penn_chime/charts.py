@@ -147,8 +147,7 @@ def build_descriptions(
     *,
     chart: Chart,
     labels: Dict[str, str],
-    prefix: str = "",
-    suffix: str = ""
+    prefix: str = ""
 ) -> str:
     """
 
@@ -173,11 +172,10 @@ def build_descriptions(
 
         messages.append(
             i18n.t("charts-peak-template").format(
-                labels[col],
-                suffix,
-                ceil(chart.data[i18n.t(prefix+col)].max()),
-                on,
-                "*" if asterisk else "",
+                target_patients=labels[prefix+col],
+                peak_number=ceil(chart.data[i18n.t(prefix+col)].max()),
+                on=on,
+                asterisk="*" if asterisk else "",
             )
         )
 
@@ -193,5 +191,5 @@ def build_table(
 ) -> pd.DataFrame:
     table_df = df[np.mod(df.day, modulo) == 0].copy()
     table_df.date = table_df.date.dt.strftime(DATE_FORMAT)
-    table_df.rename(labels)
-    return table_df
+    table_df_renamed = table_df.rename(labels, axis=1)
+    return table_df_renamed
