@@ -11,7 +11,7 @@ CHANGE_DATE = date(year=2020, month=4, day=8)
 VERSION = 'v1.1.3'
 
 DATE_FORMAT = "%b, %d"  # see https://strftime.org
-DOCS_URL = "https://code-for-philly.gitbook.io/chime"
+DOCS_URL = "https://code4history.gitbook.io/chime"
 
 EPSILON = 1.0e-7
 
