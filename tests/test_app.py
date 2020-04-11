@@ -9,17 +9,17 @@ import altair as alt  # type: ignore
 import i18n  # type: ignore
 import os # type: ignore
 
+i18n.set('filename_format', '{locale}.{format}')
+i18n.set('locale', 'en')
+i18n.set('fallback', 'en')
+i18n.load_path.append(os.path.dirname(__file__) + '/../src/penn_chime/locales')
+
 from src.penn_chime.charts import new_admissions_chart, admitted_patients_chart, chart_descriptions
 from src.penn_chime.models import SimSirModel, sir, sim_sir_df, build_admits_df, daily_growth_helper
 from src.penn_chime.parameters import Parameters
 from src.penn_chime.presentation import display_header
 from src.penn_chime.settings import DEFAULTS
 from src.penn_chime.defaults import RateLos
-
-i18n.set('filename_format', '{locale}.{format}')
-i18n.set('locale', 'en')
-i18n.set('fallback', 'en')
-i18n.load_path.append(os.path.dirname(__file__) + '/../locales')
 
 PARAM = Parameters(
     current_hospitalized=100,
