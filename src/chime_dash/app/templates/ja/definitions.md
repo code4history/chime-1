@@ -1,12 +1,12 @@
 ## 入力値のガイダンス
-* **入院中のCOVID-19患者数:**
-    The number of patients currently hospitalized with COVID-19 **at your hospital(s)**.
-    This number is used in conjunction with Hospital Market Share and Hospitalization % to estimate the total number of infected individuals in your region.
-* **Doubling Time (days):**
-    This parameter drives the rate of new cases during the early phases of the outbreak.
-    The American Hospital Association currently projects doubling rates between 7 and 10 days.
-    This is the doubling time you expect under status quo conditions.
-    To account for reduced contact and other public health interventions, modify the _Social distancing_ input.
+* **入院しているCOVID-19患者数:**
+    現在、**この病院に**COVID-19で入院している患者数です。
+    この値は病院の患者シェアや入院率と組み合わせて用いられ、地域の感染者数の総計を推定します。
+* **倍加時間 (日数):**
+    このパラメータは、アウトブレイク初期段階での新規症例の割合に影響します。
+    米国病院協会 (AHA) は現在、7日間から10日間で患者数は倍増すると予測しています。
+    これは、現在の状態で予想される倍加時間です。
+    社会的接触や他の公衆衛生に影響する要素の減少を表現する方法として、_社会的距離戦略_パラメータを修正してください。
 * **Social distancing (% reduction in person-to-person physical contact):**
     This parameter allows users to explore how reduction in interpersonal contact & transmission (hand-washing) might slow the rate of new infections.
     It is your estimate of how much social contact reduction is being achieved in your region relative to the status quo.

@@ -1,8 +1,8 @@
-infected-v-revovered-title: 病院の患者来院領域における感染者数と回復者数
+infected-v-revovered-title: 与えられた期間の病院の担当範囲における感染者数と回復者数
 
 # Chart labels
 day: 日数
 date: 日付
-susceptible: 未感染者数
+susceptible: 感受性保持者数
 infected: 感染者数
 recovered: 回復者数

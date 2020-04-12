@@ -1,30 +1,29 @@
 # CHIME
-### A Tool for COVID-19 Capacity Planning
+### COVID-19向けの収容能力計画ツール
 
-As we prepare for the additional demands that the COVID-19 
-outbreak will place on our hospital system, our operational 
-leaders need up-to-date projections of what additional resources 
-will be required. Informed estimates of how many patients will 
-need hospitalization, ICU beds, and mechanical ventilation over 
-the coming days and weeks will be crucial inputs to readiness responses 
-and mitigation strategies.
+COVID-19のアウトブレイクによって病院リソースへの追加需要に備えるにため、
+病院の運営責任者には、どのような追加リソースが必要となるかの最新の予測が必要です。
+今後数日から数週間の間に、入院患者数、集中治療室ベッド数、および人工呼吸器を必要と
+する患者数の計算された推定値は、即応性および緩和戦略を検討する重要な材料となります。
 
-CHIME allows hospitals to enter information about their population and modify assumptions around the spread and behavior of COVID-19. It then runs a standard SIR model to project the number of new hospital admissions each day, along with the daily hospital census. These projections can then be used to create best- and worst-case scenarios to assist with capacity planning. We’re announcing today that we’re open-sourcing CHIME and making it available to the healthcare community.
+CHIMEは、病院が人口に関する情報を入力し、COVID-19の広がりとふるまいに関する仮定を最新に保てるようにします。そして標準的なSIRモデルを適用し、毎日の病院の累計患者数に加えて、毎日の新規入院数を予測します。これらの予測は、収容能力計画における最良および最悪のシナリオ作成を支援します。今、我々はCHIMEをオープンソース化し、医療コミュニティで利用可能にすることを発表いたします。
 
-While the default parameters are customized and continually updated to reflect the situation at Penn Medicine, CHIME can be adapted for use by any hospital system by modifying parameters to reflect local contexts.
+パラメータの初期値は、Penn Medicineでの状況を反映するようにカスタマイズされており、それは随時更新されますが、しかしCHIMEは、様々な地域の状況を反映するようにパラメータを変更することによって、任意の病院での利用にあうようカスタマイズできます。
 
-The most impactful parameter in a SIR model is the Doubling Time. This parameter defines how rapidly a disease spreads. Experiences in other geographical contexts suggest that doubling time may range from 3 to 13 days or more, with notable examples:
+SIRモデルにおいて最もインパクトを持つパラメータは倍加時間です。このパラメータは、病気が蔓延する速さを定義します。他の地域での報告から、倍加時間は3〜13日、あるいはそれ以上であることが示唆されており、いくつかの著名な例としては、
 
-Wuhan, China: 6 days
-South Korea: 13 days (As of March 14, 2020)
-Italy: 5 days (As of March 14, 2020)
-This value is particularly important because of the exponential nature of the spread of infectious diseases such as COVID-19. This is also why public health officials recommend measures like social distancing and hand washing: the more we can slow down the spread of COVID-19, the lower the peak demand on our healthcare system. Try out our live version of CHIME and see what happens when you modify the Doubling Time parameter. You can also experiment with scenarios involving different levels of incidence severity and average lengths of stay for each severity class.
+中国、武漢: 6日
+韓国: 13日 (2020年3月14日までの状況)
+イタリア: 5日 (2020年3月14日までの状況)
 
-We’ve put effort into determining good estimates for all model parameters and have set default values accordingly. Some of the default values are based on the current situation in our home region of Philadelphia. If you’re working somewhere outside of the Philadelphia region you can simply modify the following parameters to suit your patient population:
+などが挙げられます。
+この値は、COVID-19のような感染症の蔓延が指数関数的であることより特に重要であると言え、公衆衛生担当者が社会的距離戦略や手洗いなどの対策を推奨する理由ともなります。動いているCHIMEのアプリケーションを試して、倍加時間パラメータを変更したときにどう変化するかを試してみてください。また、入院、集中治療、人工呼吸の各深刻度の患者の比率と、各深刻度における平均治療期間なども置き換えた、さまざまなシナリオも試せます。
 
-Currently Known Regional Infections
-Currently Hospitalized COVID-19 Patients
-Hospital Market Share (%)
-As local spread progresses, revised estimates can be made for some of the values in CHIME. We will try our best to keep things up to date with the latest research, but if you find an issue with any of the values we are using we’d appreciate your feedback and contributions. We also set up a Slack channel if you’d like to chat with us.
+すべてのモデル・パラメータについて適切な推定値の決定に尽力し、それに応じて初期値を設定しました。初期値のいくつかは、Penn Medicineの地元フィラデルフィアの状況に基づいています。フィラデルフィア地域以外の場所に適用する場合には、その地域での患者の状況に合わせて次のパラメータを変更できます。
 
-– Penn Predictive Healthcare Team
+現在知られている地域の感染者数
+現在入院しているCOVID-19患者数
+病院の患者シェア率 (%)
+地域的への蔓延状況の進行に応じて、CHIMEの一部の値については推定値を修正することができます。最新の調査結果を反映できるよう最善を尽くしますが、本アプリケーションが使用しているいずれかの値に問題が見つかった場合は、ご意見とご協力をくださいますようお願いします。Slackで議論したい場合はSlackのチャンネルも用意しています。
+
+– Penn 予防医学チーム
