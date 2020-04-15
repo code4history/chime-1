@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Preparing a new release · GitBook</title>
+        <title>Release Process · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,7 +57,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="release=process.md" />
+    <link rel="next" href="release-automation.html" />
     
     
 
@@ -217,12 +217,12 @@
             <ul class="articles">
                 
     
-        <li class="chapter active" data-level="1.4.1" data-path="prepare-new-chime-release.html">
+        <li class="chapter active" data-level="1.4.1" data-path="release-process.html">
             
-                <a href="prepare-new-chime-release.html">
+                <a href="release-process.html">
             
                     
-                    Preparing a new release
+                    Release Process
             
                 </a>
             
@@ -230,12 +230,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2" data-path="release=process.md">
+        <li class="chapter " data-level="1.4.2" data-path="release-automation.html">
             
-                <span>
+                <a href="release-automation.html">
             
                     
-                    Release Process
+                    Release Automation
             
                 </a>
             
@@ -395,7 +395,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Preparing a new release</a>
+        <a href=".." >Release Process</a>
     </h1>
 </div>
 
@@ -410,43 +410,23 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="operations-prepare-new-chime-release">Operations: Prepare New Chime Release</h1>
-<p>At the end of following this process you will have deployed a new CHIME version to <a href="https://penn-chime.phl.io" target="_blank">https://penn-chime.phl.io</a></p>
-<h2 id="start-here">Start Here</h2>
-<h2 id="prepare-chime-on-the-develop-branch">Prepare Chime on the Develop Branch</h2>
+                                <h1 id="operations-release-process">Operations: Release Process</h1>
+<h2 id="full-release">Full release</h2>
 <ol>
-<li>Open a new issue on GitHub titled &quot;Deploy chime $VERSION&quot; (ex: <a href="https://github.com/CodeForPhilly/chime/issues/98" target="_blank">https://github.com/CodeForPhilly/chime/issues/98</a>)<ul>
-<li>Note the PR in which the release was approved</li>
-<li>Confirm that the tag for the version was created</li>
+<li><a href="https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release" target="_blank">Create a GitHub release</a><ul>
+<li>Must be a full release, i.e., not tagged as a pre-release</li>
 </ul>
 </li>
-<li><p>Create a local branch (based on &quot;develop&quot;) to perform deploy time changed on, named &quot;deploy/$VERSION&quot;</p>
-<pre><code class="lang-bash"> <span class="hljs-built_in">export</span> VERSION=x.x.x <span class="hljs-comment">#set this to the release version you are releasing. (export VERSION=1.1.1 for version 1.1.1)</span>
- git checkout develop
- git pull
- git checkout -b deploy/<span class="hljs-variable">$VERSION</span> <span class="hljs-comment"># this will ultimately create a branch deploy/1.1.1 (from the reference above)</span>
-</code></pre>
-</li>
-<li><p>Update the app.yaml manifest file using an editor. You will need to change the line that has: <code>- image: docker.pkg.github.com/codeforphilly/chime/penn-chime:&lt;insert versions here&gt;</code></p>
-<ul>
-<li><p>After that is complete, update your branch.</p>
-<pre><code class="lang-bash">git add k8s/app.yml
-git diff --staged
-git commit -m <span class="hljs-string">&quot;Deploy chime <span class="hljs-variable">$VERSION</span>&quot;</span>
-</code></pre>
-</li>
+<li>Wait for CI to open a Pull Request titled &quot;Deploy CHIME vX.X.X&quot;</li>
+<li>Have a release manager approve &amp; merge the PR</li>
+</ol>
+<h2 id="release-candidate">Release Candidate</h2>
+<ol>
+<li><a href="https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release" target="_blank">Create a GitHub release</a><ul>
+<li>Must be marked as a pre-release</li>
 </ul>
 </li>
-<li><p>Push changes</p>
-<pre><code class="lang-bash"> git push -u origin deploy/<span class="hljs-variable">$VERSION</span>
-</code></pre>
-</li>
-<li><p><a href="https://github.com/CodeForPhilly/chime/compare" target="_blank">Open PR on GitHub</a> to merge changes back into develop, ideally with
-the review of another DevOps admin whenever possible. Ensure to link
-to the PR in the deployment issue previously opened on GitHub.</p>
-</li>
-<li><p>Once approved, you will need to <a href="release-process.md">create a release to auto deploy</a></p>
-</li>
+<li>Wait for CI to build/deploy to pre-production environment</li>
 </ol>
 
                                 
@@ -476,7 +456,7 @@ to the PR in the deployment issue previously opened on GitHub.</p>
             
                 
                 
-                <a href="release=process.md" class="navigation navigation-next navigation-unique" aria-label="Next page: Release Process">
+                <a href="release-automation.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Release Automation">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -487,7 +467,7 @@ to the PR in the deployment issue previously opened on GitHub.</p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Preparing a new release","level":"1.4.1","depth":2,"next":{"title":"Release Process","level":"1.4.2","depth":2,"path":"operations/release=process.md","ref":"./operations/release=process.md","articles":[]},"previous":{"title":"Operations","level":"1.4","depth":1,"ref":"","articles":[{"title":"Preparing a new release","level":"1.4.1","depth":2,"path":"operations/prepare-new-chime-release.md","ref":"./operations/prepare-new-chime-release.md","articles":[]},{"title":"Release Process","level":"1.4.2","depth":2,"path":"operations/release=process.md","ref":"./operations/release=process.md","articles":[]},{"title":"The chime-live Cluster","level":"1.4.3","depth":2,"path":"operations/chime-live-cluster.md","ref":"./operations/chime-live-cluster.md","articles":[]},{"title":"Deploy to Heroku","level":"1.4.4","depth":2,"path":"operations/heroku.md","ref":"./operations/heroku.md","articles":[]},{"title":"Deploy with Chef Habitat","level":"1.4.5","depth":2,"path":"operations/habitat.md","ref":"./operations/habitat.md","articles":[]},{"title":"Deploy to Your Own Cluster","level":"1.4.6","depth":2,"path":"operations/byok8s.md","ref":"./operations/byok8s.md","articles":[]},{"title":"Manual Validation","level":"1.4.7","depth":2,"path":"operations/manual-validation.md","ref":"./operations/manual-validation.md","articles":[]},{"title":"Limited Cluster Access for Deployment","level":"1.4.8","depth":2,"path":"operations/limited-kubeconfigs/limited-kubeconfigs.md","ref":"./operations/limited-kubeconfigs/limited-kubeconfigs.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["mermaid@git+https://github.com/JarvusInnovations/gitbook-plugin-mermaid.git"],"pluginsConfig":{"mermaid":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"operations/prepare-new-chime-release.md","mtime":"2020-04-12T14:23:44.099Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-04-12T14:23:50.731Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Release Process","level":"1.4.1","depth":2,"next":{"title":"Release Automation","level":"1.4.2","depth":2,"path":"operations/release-automation.md","ref":"./operations/release-automation.md","articles":[]},"previous":{"title":"Operations","level":"1.4","depth":1,"ref":"","articles":[{"title":"Release Process","level":"1.4.1","depth":2,"path":"operations/release-process.md","ref":"./operations/release-process.md","articles":[]},{"title":"Release Automation","level":"1.4.2","depth":2,"path":"operations/release-automation.md","ref":"./operations/release-automation.md","articles":[]},{"title":"The chime-live Cluster","level":"1.4.3","depth":2,"path":"operations/chime-live-cluster.md","ref":"./operations/chime-live-cluster.md","articles":[]},{"title":"Deploy to Heroku","level":"1.4.4","depth":2,"path":"operations/heroku.md","ref":"./operations/heroku.md","articles":[]},{"title":"Deploy with Chef Habitat","level":"1.4.5","depth":2,"path":"operations/habitat.md","ref":"./operations/habitat.md","articles":[]},{"title":"Deploy to Your Own Cluster","level":"1.4.6","depth":2,"path":"operations/byok8s.md","ref":"./operations/byok8s.md","articles":[]},{"title":"Manual Validation","level":"1.4.7","depth":2,"path":"operations/manual-validation.md","ref":"./operations/manual-validation.md","articles":[]},{"title":"Limited Cluster Access for Deployment","level":"1.4.8","depth":2,"path":"operations/limited-kubeconfigs/limited-kubeconfigs.md","ref":"./operations/limited-kubeconfigs/limited-kubeconfigs.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["mermaid@git+https://github.com/JarvusInnovations/gitbook-plugin-mermaid.git"],"pluginsConfig":{"mermaid":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"operations/release-process.md","mtime":"2020-04-15T08:07:32.620Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-04-15T08:07:39.126Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
